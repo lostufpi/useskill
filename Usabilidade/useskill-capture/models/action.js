@@ -1,12 +1,12 @@
 module.exports = function(sequelize, DataTypes) {
-	var Action = sequelize.define('Action', {
+	var ActionOracle = sequelize.define('ActionOracle', {
 			sActionType: DataTypes.STRING,
 			sContent: DataTypes.TEXT,
-			sPosX: DataTypes.INTEGER,
-			sPosY: DataTypes.INTEGER,
+			sPosX: DataTypes.BIGINT,
+			sPosY: DataTypes.BIGINT,
 			sTag: DataTypes.STRING,
 			sTagIndex: DataTypes.STRING,
-			sTime: DataTypes.BIGINT(20),
+			sTime: DataTypes.BIGINT,
 			sUrl: DataTypes.STRING,
 			sContentText: DataTypes.TEXT,
 			sClass: DataTypes.STRING,
@@ -16,7 +16,7 @@ module.exports = function(sequelize, DataTypes) {
 			sUserAgent: DataTypes.TEXT,
 
 			sClient: DataTypes.STRING,
-			sVersion: DataTypes.INTEGER,
+			sVersion: DataTypes.BIGINT,
 
 			sUsername: DataTypes.STRING,
 			sRole: DataTypes.STRING,
@@ -25,6 +25,11 @@ module.exports = function(sequelize, DataTypes) {
 			sActionJhm: DataTypes.STRING,
 			sSectionJhm: DataTypes.STRING,
 			sStepJhm: DataTypes.STRING,
+			
+			sOracleElements: DataTypes.BIGINT,
+			sOracleUrl: DataTypes.STRING,
+			sOracleVisibleElements: DataTypes.BIGINT,
+			sOracleVeredict: DataTypes.STRING,
 
 			sDeleted: {
 				type: DataTypes.BOOLEAN,
@@ -36,5 +41,5 @@ module.exports = function(sequelize, DataTypes) {
 	    }
 	});
 
-  	return Action;
+  	return ActionOracle;
 }

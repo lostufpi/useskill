@@ -22,7 +22,7 @@ exports.create = function(req, res) {
 			for(var idx in acoes){
 				var acao = acoes[idx];
 				console.log(acao)
-				db.Action.create({
+				db.ActionOracle.create({
 			  		sActionType: acao['sActionType'],
 			  		sContent: acao['sContent'],
 			  		sPosX: acao['sPosX'],
@@ -47,7 +47,12 @@ exports.create = function(req, res) {
 			  		sJhm: acao['sJhm'],
 			  		sActionJhm: acao['sActionJhm'],
 			  		sSectionJhm: acao['sSectionJhm'],
-			  		sStepJhm: acao['sStepJhm']
+			  		sStepJhm: acao['sStepJhm'],
+			  		
+			  		sOracleElements: acao['sOracleElements'],
+			  		sOracleUrl: acao['sOracleUrl'],
+			  		sOracleVisibleElements: acao['sOracleVisibleElements'],
+			  		sOracleVeredict: acao['sOracleVeredict']
 			  	});
 			}
 			status = "success";
