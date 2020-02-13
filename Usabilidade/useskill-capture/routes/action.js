@@ -22,7 +22,7 @@ exports.create = function(req, res) {
 			for(var idx in acoes){
 				var acao = acoes[idx];
 				console.log(acao)
-				db.ActionOracle.create({
+				db.ActionDataMinings.create({
 			  		sActionType: acao['sActionType'],
 			  		sContent: acao['sContent'],
 			  		sPosX: acao['sPosX'],
@@ -52,7 +52,12 @@ exports.create = function(req, res) {
 			  		sOracleElements: acao['sOracleElements'],
 			  		sOracleUrl: acao['sOracleUrl'],
 			  		sOracleVisibleElements: acao['sOracleVisibleElements'],
-			  		sOracleVeredict: acao['sOracleVeredict']
+			  		sOracleVeredict: acao['sOracleVeredict'],
+					
+					sMobileConf: acao['sMobileConf'], //MILL
+					sMobile: acao['sMobile'], //MILL
+				    sDuration: acao['sDuration'] //MILL
+
 			  	});
 			}
 			status = "success";

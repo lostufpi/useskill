@@ -2,8 +2,8 @@ package br.ufpi.datamining.models.vo;
 
 import java.util.List;
 
-import br.ufpi.datamining.models.aux.BarChart;
-import br.ufpi.datamining.models.aux.StackedAreaChart;
+import br.ufpi.datamining.models.auxiliar.BarChart;
+import br.ufpi.datamining.models.auxiliar.StackedAreaChart;
 
 public class ChartsVO {
 	private List<StackedAreaChart> areaCharts;

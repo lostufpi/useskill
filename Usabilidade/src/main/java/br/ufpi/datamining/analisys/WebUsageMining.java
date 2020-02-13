@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Duration;
+//MILL import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -19,10 +19,10 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import javax.persistence.EntityManager;
-
+	
 import org.apache.bcel.generic.IFGE;
 import org.jgrapht.alg.CycleDetector;
-import org.jgrapht.alg.cycle.HawickJamesSimpleCycles;
+//MILL import org.jgrapht.alg.cycle.HawickJamesSimpleCycles;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedPseudograph;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
@@ -39,15 +39,15 @@ import br.ufpi.datamining.models.FieldSearchTupleDataMining;
 import br.ufpi.datamining.models.PageViewActionDataMining;
 import br.ufpi.datamining.models.TaskDataMining;
 import br.ufpi.datamining.models.TestDataMining;
-import br.ufpi.datamining.models.aux.CorrectnessTask;
-import br.ufpi.datamining.models.aux.CountActionsAux;
-import br.ufpi.datamining.models.aux.FieldSearch;
-import br.ufpi.datamining.models.aux.FieldSearchComparatorEnum;
-import br.ufpi.datamining.models.aux.OrderSearch;
-import br.ufpi.datamining.models.aux.ResultDataMining;
-import br.ufpi.datamining.models.aux.SessionResultDataMining;
-import br.ufpi.datamining.models.aux.TaskSmellAnalysis;
-import br.ufpi.datamining.models.aux.UserResultDataMining;
+import br.ufpi.datamining.models.auxiliar.CorrectnessTask;
+import br.ufpi.datamining.models.auxiliar.CountActionsAux;
+import br.ufpi.datamining.models.auxiliar.FieldSearch;
+import br.ufpi.datamining.models.auxiliar.FieldSearchComparatorEnum;
+import br.ufpi.datamining.models.auxiliar.OrderSearch;
+import br.ufpi.datamining.models.auxiliar.ResultDataMining;
+import br.ufpi.datamining.models.auxiliar.SessionResultDataMining;
+import br.ufpi.datamining.models.auxiliar.TaskSmellAnalysis;
+import br.ufpi.datamining.models.auxiliar.UserResultDataMining;
 import br.ufpi.datamining.models.enums.ActionTypeDataMiningEnum;
 import br.ufpi.datamining.models.enums.SessionClassificationDataMiningEnum;
 import br.ufpi.datamining.models.enums.SessionClassificationDataMiningFilterEnum;
@@ -309,7 +309,13 @@ public class WebUsageMining {
 				List<FieldSearch> fieldsSearch = new ArrayList<FieldSearch>();
 				fieldsSearch.add(new FieldSearch("sActionType", "sActionType", a.getActionType().getAction(), FieldSearchComparatorEnum.EQUALS));
 				for(FieldSearchTupleDataMining f : a.getElementFiedlSearch()){
+					/*CAMBIO MILL*/
+					if (!f.valueToObject().equals("null")){
+					/*FIN MILL*/
 					fieldsSearch.add(new FieldSearch(f.getField(), f.getField(), f.valueToObject(), FieldSearchComparatorEnum.EQUALS));
+					/*CAMBIO MILL*/
+					}
+					/*FIN MILL*/
 				}
 				for(FieldSearchTupleDataMining f : a.getUrlFieldSearch()){
 					if (taskDataMining.getTestDataMining().getIsIgnoreURL()) {
@@ -941,6 +947,36 @@ public class WebUsageMining {
 		
 		return actionDataMiningRepository.getActions(fieldsSearch, null, new OrderSearch("sTime", true), limit);
 	}
+	
+	/*MILL*/
+	/**
+	 * Obtiene el listado de acciones entre fechas en orden de usuario, url y tiempo
+	 * 
+	 * @param	clientAbbreviation			nombre del cliente
+	 * @param	taskDataMiningRepository	Repositorio de las tareas
+	 * @param	actionDataMiningRepository	Repositorio de las acciones
+	 * @param	initialDate					fecha inicial
+	 * @param	finalDate					fecha final
+	 * @param	limit						cantidad maxima de registros a mostrar
+	 * @return								listado de acciones ordenadas
+	 */
+	public static List<ActionDataMining> listActionsBetweenDatesOrder(String clientAbbreviation, TaskDataMiningRepository taskDataMiningRepository, 
+																		ActionDataMiningRepository actionDataMiningRepository, Date initialDate, Date finalDate, Long limit) {
+		List<FieldSearch> fieldsSearch = new ArrayList<FieldSearch>();
+		List<OrderSearch> orderSearch = new ArrayList<OrderSearch>();
+		fieldsSearch.add(new FieldSearch("sClient", "sClient", clientAbbreviation, FieldSearchComparatorEnum.EQUALS));
+		if (initialDate != null) {
+			fieldsSearch.add(new FieldSearch("sTime", "sTime1", initialDate.getTime(), FieldSearchComparatorEnum.GREATER_EQUALS_THAN));
+		}
+		if (finalDate != null) {
+			fieldsSearch.add(new FieldSearch("sTime", "sTime2", finalDate.getTime(), FieldSearchComparatorEnum.LESS_EQUALS_THAN));
+		}
+		orderSearch.add(new OrderSearch("sUsername", true));
+		orderSearch.add(new OrderSearch("sUrl", true));
+		orderSearch.add(new OrderSearch("sTime", true));
+		return actionDataMiningRepository.getActionsOrder(fieldsSearch, null, orderSearch, limit);
+	}
+	/*FIN MILL*/
 	
 	public static List<ActionDataMining> listActionsFromUserBetweenDates(String clientAbbreviation, String username, FieldSearch actionLocal, ActionDataMiningRepository actionDataMiningRepository, Date initialDate, Date finalDate, Long limit) {
 		List<FieldSearch> fieldsSearch = new ArrayList<FieldSearch>();

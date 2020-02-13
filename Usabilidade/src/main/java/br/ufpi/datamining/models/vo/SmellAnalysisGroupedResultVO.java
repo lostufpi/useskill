@@ -3,7 +3,7 @@ package br.ufpi.datamining.models.vo;
 import java.util.List;
 import java.util.Map;
 
-import br.ufpi.datamining.models.aux.TaskSmellAnalysisGroupedResult;
+import br.ufpi.datamining.models.auxiliar.TaskSmellAnalysisGroupedResult;
 
 public class SmellAnalysisGroupedResultVO {
 	private Map<String, List<TaskSmellAnalysisGroupedResult>> tasksAnalysisGroupedResult;

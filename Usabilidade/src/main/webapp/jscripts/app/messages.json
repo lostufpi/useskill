@@ -31,7 +31,7 @@
 	"description": "Descrição",
 	"count": "Count",
 	"id": "ID",
-	"index": "Índice",
+	"index": "�ndice",
 	"others...": "Outros...",
 	
 	"sTime":"Hora",
@@ -264,6 +264,7 @@
 	
 	
 	"datamining.smells.error.default" : "Ocorreu um erro, tente novamente...",
+	"datamining.smells.error.mobile.smells" : "Por favor, escolha um rango mais pequeno.",
 	"datamining.smells.testes.viewstatistics" : "Visualizar Estatísticas do Sistema",
 	"datamining.smells.testes.detection" : "Detecção de Usability Smells",
 	
@@ -378,6 +379,13 @@
 	"datamining.smells.testes.attemptcount" : "Quantidade de tentativas de \"tooltip\"",
 	"datamining.smells.testes.repetitioncount" : "Quantidade de repetições",
 	"datamining.smells.testes.diffelementcount" : "Quantidade de elementos diferentes",
+	"datamining.smells.testes.actioncountmobile" : "Mobile - Quantidade de ações",
+	"datamining.smells.testes.mobileevents" : "Mobile Events",
+	"datamining.smells.testes.mobilecontext" : "Mobile - Contexto de Uso",
+	"datamining.smells.testes.mobiletype" : "Tipo",
+	"datamining.smells.testes.mobileos" : "OS",	
+	"datamining.smells.testes.mobilebrowser" : "Browser",
+	"datamining.smells.testes.mobileresolution" : "Resolution",
 	
 	"datamining.smells.testes.actions" : "Ações",
 	"datamining.smells.testes.occurrencecount" : "Quantidade de ocorrências",
@@ -408,6 +416,51 @@
 	"datamining.smells.testes.diffelementcount.info" : "Indica as URLs em que há mais elementos sobres os quais o usuário executou algum tipo de ação. Em outras palavras, esta métrica exibe as páginas da aplicação que mais possuem elementos interagíveis.",
 	
 	"datamining.smells.testes.evaluate" : "Avaliar",
-	"datamining.smells.testes.timewindow" : "Janela Temporal"
+	"datamining.smells.testes.timewindow" : "Janela Temporal",
+
+	"datamining.smells.testes.mobile.principal" : "Manutenção e Detecção de Web Mobile Usability Smells",
+	"datamining.smells.testes.detectionMobile" : "Detecção de Web Mobile Usability Smells",
+	"datamining.smells.testes.mobile.crud" : "Manutenção de Web Mobile Usability Smells",
 	
+	"datamining.smells.testes.mobile.smells" : "Web Mobile Usability Smells",
+	"datamining.smells.testes.mobile.title" : "Titulo",
+	"datamining.smells.testes.mobile.new" : "Criar Web Mobile Usability Smells",
+	"datamining.smells.testes.mobile.edit" : "Editar Mobile Usability Smells",
+	"datamining.smells.testes.mobile.description" : "Descrição do Smells",
+	"datamining.smells.testes.mobile.caracter" : "Caracter"	,
+	"datamining.smells.testes.mobile.quantificador" : "Quantificador",
+	"datamining.smells.testes.mobile.time" : "Duração (seg)",
+	"datamining.smells.testes.mobile.tag" : "Tag",
+	"datamining.smells.testes.mobile.incluir" : "Incluir Linha",	
+	"datamining.smells.testes.mobile.incluir.padrao" : "Incluir Padrão",	
+	"datamining.smells.testes.mobile.caracter.exemplo" : "Exemplo: orientationchange, pinchout, (singletap|focusout), etc."	,
+	"datamining.smells.testes.mobile.quantificador.exemplo" : "Exemplo: {3,}",
+	"datamining.smells.testes.mobile.tag.exemplo" : "Indica se o padr�o deve incluir a mesma tag ao procurar o evento. S� se aplica quando um caracter � escolhido, e n�o meta caracter.",
+	
+	"datamining.smells.testes.mobile.pattern" : "Definição de Padrões",
+	"datamining.smells.testes.mobile.pattern.info" : "Estes padrões são baseados em expressões regulares, onde caracteres, quantidade de repetição e meta-caracteres são definidos no conteudo de cada padrão.",
+	"datamining.smells.testes.mobile.pattern.info2" : "Os caracteres sao os eventos: singletap, doubletap, taphold, focusout, orientationchange, swipe, swipeup, swipedown, swipeleft, swiperigth, pinch, pinchin, pinchout, onload, form_submit, focusinput",
+	"datamining.smells.testes.mobile.pattern.info3" : "Os quantificadores a serem utilizados são: ",
+	"datamining.smells.testes.mobile.pattern.info3.1" : "* Corresponder 0 ou mais vezes.",
+	"datamining.smells.testes.mobile.pattern.info3.2" : "+ Corresponder 1 ou mais vezes.",
+	"datamining.smells.testes.mobile.pattern.info3.3" : "? Corresponder 1 ou 0 vezes.",
+	"datamining.smells.testes.mobile.pattern.info3.4" : "{n} Corresponder exatamente n vezes.",
+	"datamining.smells.testes.mobile.pattern.info3.5" : "{n,} Corresponder pelo menos n vezes.",
+	"datamining.smells.testes.mobile.pattern.info3.6" : "{n,m} Corresponde pelo menos n mas não mais do que m vezes.",
+	"datamining.smells.testes.mobile.pattern.info4" : "Os meta caracteres usados são | representando ou e () para agrupamento.",
+	"datamining.smells.testes.mobile.pattern.infof" : "<p>Estes padrões são baseados em expressões regulares, onde caracteres, quantidade de repetição e meta-caracteres são definidos no conteudo de cada padrão.<br/></p>  <p> Os caracteres sao os eventos: singletap, doubletap, press, focusout, orientationchange, swipe, swipeup, swipedown, swipeleft, swiperigth,pinch, pinchin, pinchout <br/></p> <p> Os quantificadores a serem utilizados são: <br> * Corresponder 0 ou mais vezes<br> + Corresponder 1 ou mais vezes<br> ? Corresponder 1 ou 0 vezes<br> {n} Corresponder exatamente n vezes<br> {n,} Corresponder pelo menos n vezes <br> {n,m} Corresponde pelo menos n mas não mais do que m vezes <br/></p> <p> Os meta caracteres usados são | representando ou e () para agrupamento.<br/></p>",
+
+	"datamining.smells.testes.mobile.tempo.events" : "Tempo entre eventos",
+	"datamining.smells.testes.mobile.descoberta" : "Descoberta de Padrões",
+	"datamining.smells.testes.mobile.quantidade" : "Quantidade de Repeti�es",
+	"datamining.smells.testes.mobile.tam" : "Tamanho do Padrão",
+	"datamining.smells.testes.mobile.tam.min" : "Tamanho minimo do Padrão",
+	"datamining.smells.testes.mobile.tam.max" : "Tamanho maximo do Padrão",
+	"datamining.smells.testes.mobile.patterns" : "Padrões",
+	"datamining.smells.testes.mobile.tempo" : "Tempo Total da Sessão",
+	"datamining.smells.testes.mobile.usuario" : "Usuario Especialista",
+	"datamining.smells.testes.mobile.lcs" : "Longest Common String",
+	"datamining.smells.testes.mobile.lcs2" : "Quantidade de registros por URL",
+	"datamining.smells.testes.mobile.contexto" : "Contexto de Uso"
+		
 }

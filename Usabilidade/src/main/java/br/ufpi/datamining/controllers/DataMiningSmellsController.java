@@ -35,12 +35,12 @@ import br.ufpi.datamining.models.IgnoredUrlDataMining;
 import br.ufpi.datamining.models.ParameterSmellTestDataMining;
 import br.ufpi.datamining.models.TaskDataMining;
 import br.ufpi.datamining.models.TestDataMining;
-import br.ufpi.datamining.models.aux.BarChart;
-import br.ufpi.datamining.models.aux.ResultDataMining;
-import br.ufpi.datamining.models.aux.StackedAreaChart;
-import br.ufpi.datamining.models.aux.TaskSmellAnalysis;
-import br.ufpi.datamining.models.aux.TaskSmellAnalysisGroupedResult;
-import br.ufpi.datamining.models.aux.TaskSmellAnalysisResult;
+import br.ufpi.datamining.models.auxiliar.BarChart;
+import br.ufpi.datamining.models.auxiliar.ResultDataMining;
+import br.ufpi.datamining.models.auxiliar.StackedAreaChart;
+import br.ufpi.datamining.models.auxiliar.TaskSmellAnalysis;
+import br.ufpi.datamining.models.auxiliar.TaskSmellAnalysisGroupedResult;
+import br.ufpi.datamining.models.auxiliar.TaskSmellAnalysisResult;
 import br.ufpi.datamining.models.enums.ReturnStatusEnum;
 import br.ufpi.datamining.models.enums.SessionClassificationDataMiningFilterEnum;
 import br.ufpi.datamining.models.vo.ChartsVO;
@@ -74,6 +74,8 @@ public class DataMiningSmellsController extends BaseController {
 	private static final int ACTION_TOOLTIP_COUNT = 6;
 	private static final int ACTION_REPETITION_COUNT = 7;
 	private static final int URL_DIFF_ACTION_COUNT = 8;
+	private static final int ACTION_COUNT = 9; //MILL
+	private static final int CONTEXT_COUNT = 91; //MILL
 	
 	//parametros
 	private static final int MAX_ACTION_COUNT = 1;
@@ -143,7 +145,8 @@ public class DataMiningSmellsController extends BaseController {
 				ArrayUtils.contains(selectedMetrics, TASK_CYCLE_RATE) || ArrayUtils.contains(selectedMetrics, TASK_LAYER_COUNT);
 		boolean mineActions =
 				ArrayUtils.contains(selectedMetrics, ACTION_OCCURRENCE_RATE) || ArrayUtils.contains(selectedMetrics, ACTION_TOOLTIP_COUNT) ||
-				ArrayUtils.contains(selectedMetrics, ACTION_REPETITION_COUNT) || ArrayUtils.contains(selectedMetrics, URL_DIFF_ACTION_COUNT);
+				ArrayUtils.contains(selectedMetrics, ACTION_REPETITION_COUNT) || ArrayUtils.contains(selectedMetrics, URL_DIFF_ACTION_COUNT) || 
+				ArrayUtils.contains(selectedMetrics, ACTION_COUNT); //MILL
 		
 		if (mineSessions) {
 			for (TaskDataMining task : test.getTasks()) {
@@ -204,6 +207,17 @@ public class DataMiningSmellsController extends BaseController {
 			if (debug) System.out.println("Generating url different action count chart...");
 			barCharts.add(usm.generateUrlElementCountChart(actions, maxResultCount));
 		}
+		
+		//MILL
+		if (ArrayUtils.contains(selectedMetrics, ACTION_COUNT)) {
+			if (debug) System.out.println("Generating action count chart...");
+			barCharts.add(usm.generateCountChart(actions, maxResultCount));
+		}
+		if (ArrayUtils.contains(selectedMetrics, CONTEXT_COUNT)) {
+			if (debug) System.out.println("Generating context count chart...");
+			barCharts.add(usm.generateContextChart(actions, maxResultCount));
+		}
+		//FIN MILL
 		
 		if (areaCharts.size() > 0 || barCharts.size() > 0) {
 			String json = gson.toJson(new ChartsVO(areaCharts, barCharts));
@@ -475,4 +489,5 @@ public class DataMiningSmellsController extends BaseController {
 			result.use(Results.json()).from(gson.toJson(new ArrayList<IgnoredUrlDataMining>())).serialize();
 	}
 	
+		
 }

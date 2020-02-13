@@ -1,0 +1,152 @@
+<body> 
+	<div class="container-padding-left">
+		
+		<ul class="breadcrumb">
+			<li>
+				<a ng-href="/"> 
+					{{ 'inicio' | translate}}
+				</a>
+				<span class="divider">/</span>
+			</li>
+			<li>
+				<a ng-href="#/testes/"> 
+					{{ 'datamining' | translate}} - {{ 'datamining.testes.list' | translate}}
+				</a>
+				<span class="divider">/</span>
+			</li>
+			<li>
+				<a ng-href="#/testes/{{taskCtrl.test.id}}/smells/detectionMobile"> 
+					{{ 'datamining.smells.testes.mobile.principal' | translate}}
+				</a>
+				<span class="divider">/</span>
+			</li>
+			<!-- <li>
+				<a ng-href="#/testes/{{taskCtrl.test.id}}/tarefas"> 
+					{{ 'datamining.testes.evaluation' | translate}}
+				</a>
+				<span class="divider">/</span>
+			</li>
+			<li ng-show="taskCtrl.task.id">
+				<a ng-href="#/testes/{{taskCtrl.test.id}}/tarefas/{{taskCtrl.task.id}}"> 
+					{{ 'datamining.tasks.details' | translate}}
+				</a>
+				<span class="divider">/</span>
+			</li> -->
+			<li>{{ smellCtrl.actionTitle }}</li>
+		</ul>
+		
+		
+		<usdm-messages-alert></usdm-messages-alert>
+		
+	    
+	    <div class="span10 center">
+		
+			<form name="myForm" class="datamining-form form-layout">
+				<fieldset>
+					<legend>
+						<span>{{ smellCtrl.actionTitle }}</span>
+						<hr/>
+					</legend>
+					
+					<input type="hidden" ng-model="smellCtrl.smell.id" name="smell.id" id="smellId"  />
+					
+					<div class="control-group">
+		            	<label class="control-label" for="smellsName">{{ 'datamining.smells.testes.detection.smellname' | translate}}:* </label>
+		            	<div class="controls">
+		                	<input type="text" ng-model="smellCtrl.smell.sName" name="smell.sName"  id="smellsName" class="input" ng-required="true" /> 
+		            	</div>
+		        	</div>
+		        	
+		        	<div class="control-group">
+		            	<label class="control-label" for="smellsContent">{{ 'datamining.smells.testes.mobile.description' | translate}}:* </label>
+		            	<div class="controls">
+		                	<input type="text" ng-model="smellCtrl.smell.sContent" name="smell.sContent"  id="smellsContent" class="input" ng-required="true"/> 
+		            	</div>
+		        	</div>
+		        			
+		        	<div class="control-group">
+		            	<label class="control-label" for="smellsSmellType">{{ 'datamining.smells.testes.mobile.tempo.events' | translate}}:* </label>
+		            	<div class="controls">
+		                	<input type="text" ng-model="smellCtrl.smell.sSmellType" name="smell.sSmellType"  id="smellsSmellType" class="input" ng-required="true"/> (milisegundos)
+		            	</div>
+		        	</div>
+		        	        	
+		        	<h3 class="span8">
+	            		  {{ 'datamining.smells.testes.mobile.pattern' | translate}}         		
+	            	</h3>
+	            	
+	            	<div class="span10">
+	            		<p>
+		            	{{ 'datamining.smells.testes.mobile.pattern.info' | translate}} <br>
+		            	{{ 'datamining.smells.testes.mobile.pattern.info2' | translate}} <br>
+		            	{{ 'datamining.smells.testes.mobile.pattern.info3' | translate}} <br>
+		            	{{ 'datamining.smells.testes.mobile.pattern.info3.1' | translate}} <br>
+		            	{{ 'datamining.smells.testes.mobile.pattern.info3.2' | translate}} <br>
+		            	{{ 'datamining.smells.testes.mobile.pattern.info3.3' | translate}} <br>
+		            	{{ 'datamining.smells.testes.mobile.pattern.info3.4' | translate}} <br>
+		            	{{ 'datamining.smells.testes.mobile.pattern.info3.5' | translate}} <br>
+		            	{{ 'datamining.smells.testes.mobile.pattern.info3.6' | translate}} <br>
+		            	{{ 'datamining.smells.testes.mobile.pattern.info4' | translate}} <br>
+		            	</p>
+	           		</div>
+	           		<br>
+	           		<div class="span8">
+	           			<button ng-click="smellCtrl.incluirPadrao(smellCtrl.smell.detail)"  class="btn btn-small">{{ 'datamining.smells.testes.mobile.incluir.padrao' | translate}}</button>
+	           		</div>
+	           		<div class="span8">
+		        		<button ng-click="smellCtrl.incluir(smellCtrl.smell.detail)"  class="btn btn-mini">{{ 'datamining.smells.testes.mobile.incluir' | translate}}</button>
+		        	</div>
+		        	<br>
+		        	<table class="control-group" >
+					<thead>
+		              <tr>
+		              	<th width="20%">Id Padron</th>
+		              	<th width="30%">{{ 'datamining.smells.testes.mobile.caracter' | translate}}*<a href="" class="icon-info-sign" data-toggle="tooltip" data-placement="right" title="{{ 'datamining.smells.testes.mobile.caracter.exemplo' | translate}}"></a></th>
+					    <th width="30%">{{ 'datamining.smells.testes.mobile.quantificador' | translate}}*<a href="" class="icon-info-sign" data-toggle="tooltip" data-placement="right" title="{{ 'datamining.smells.testes.mobile.quantificador.exemplo' | translate}}"></a></th>
+					    <!-- <th width="15%">{{ 'datamining.smells.testes.mobile.time' | translate}}</th> -->
+		                <!--<th width="20%">{{ 'datamining.smells.testes.mobile.tag' | translate}}*<a href="" class="icon-info-sign" data-toggle="tooltip" data-placement="right" title="{{ 'datamining.smells.testes.mobile.tag.exemplo' | translate}}"></a></th>-->
+					    <th width="20%">{{ 'datamining.delete' | translate}}</th>
+		              </tr>
+		            </thead>
+	         		<tbody>
+	                   <tr ng-repeat="detail in smellCtrl.smell.detail">
+	                     <td>
+	                     	<input type="hidden" name="detail.id" ng-model="detail.id" />
+	                     	<input class="span1"  type="text" name="detail.idSmellPattern" ng-model="detail.idSmellPattern" ng-disabled="true" />
+		                 </td>  
+		                 <td>
+	                     	 <input class="span3" type="text" ng-model="detail.sEvent" name="detail.sEvent"  id="smellsDetsEvent"  ng-required="true"/>
+	                     	<!-- <select ng-model="detail.sEvent" name="detail.sEvent" id="smellsDetsEvent" ng-options="events.value as events.name for events in smellCtrl.gestures" >-->
+		                 </td>     
+						 <td class="text-center">	     
+						    <input class="span1"  type="text" ng-model="detail.sQuantity" name="detail.sQuantity"  id="smellsDetssQuantity" ng-required="true"/>             	
+							<!-- <select class="span2" ng-model="detail.sQuantity" name="detail.sQuantity" id="smellsDetsQuantity" ng-options="durations.value as durations.name for durations in smellCtrl.durations" >
+		                	</select>  -->
+						 </td>   
+						 <!--   
+						 <td class="text-center">
+	                     		<input type="checkbox" ng-model="detail.sIndTag" name="detail.sIndTag"  id="smellsDetsIndTag" ng-checked="detail.sIndTag == 1" ng-true-value="1" ng-false-value="0" />
+						 </td>
+						  -->       
+						 <td class="text-center">
+						 	<input type="checkbox" ng-model="detail.Remove"/>
+						 </td>                  
+	                   </tr>
+		            </tbody>
+		         </table>
+		         <div class="span8">
+		         	<button ng-click="smellCtrl.removeRow(smellCtrl.smell.detail)"  class="btn btn-mini">{{ 'datamining.delete' | translate}}</button>
+		         </div>
+		         <br>
+		         <hr/>
+					
+		        	<div class="form-actions">
+		            	<button ng-click="smellCtrl.save()"  class="btn btn-primary pull-right submit">{{ taskCtrl.actionTitle }}Salvar</button>
+		            	<a href="#/" onclick="window.history.go(-1); return false;" class="btn pull-right">{{ 'datamining.back' | translate}}</a>
+		        	</div>
+		        	
+				</fieldset>
+			</form>
+		</div>
+    </div>
+</body>

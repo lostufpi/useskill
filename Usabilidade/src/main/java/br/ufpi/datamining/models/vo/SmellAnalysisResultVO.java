@@ -3,7 +3,7 @@ package br.ufpi.datamining.models.vo;
 import java.util.List;
 import java.util.Map;
 
-import br.ufpi.datamining.models.aux.TaskSmellAnalysisResult;
+import br.ufpi.datamining.models.auxiliar.TaskSmellAnalysisResult;
 
 public class SmellAnalysisResultVO {
 	

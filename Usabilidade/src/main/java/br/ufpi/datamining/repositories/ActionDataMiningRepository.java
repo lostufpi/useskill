@@ -1,7 +1,5 @@
 package br.ufpi.datamining.repositories;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -12,9 +10,9 @@ import javax.persistence.Query;
 
 import br.com.caelum.vraptor.ioc.Component;
 import br.ufpi.datamining.models.ActionDataMining;
-import br.ufpi.datamining.models.aux.CountActionsAux;
-import br.ufpi.datamining.models.aux.FieldSearch;
-import br.ufpi.datamining.models.aux.OrderSearch;
+import br.ufpi.datamining.models.auxiliar.CountActionsAux;
+import br.ufpi.datamining.models.auxiliar.FieldSearch;
+import br.ufpi.datamining.models.auxiliar.OrderSearch;
 import br.ufpi.datamining.models.enums.ActionTypeDataMiningEnum;
 import br.ufpi.datamining.utils.EntityManagerUtil;
 import br.ufpi.repositories.Repository;
@@ -86,6 +84,64 @@ public class ActionDataMiningRepository extends Repository<ActionDataMining, Lon
 		}
 		return null;
 	}
+	
+	/*MILL*/
+	@SuppressWarnings("unchecked")
+	public List<ActionDataMining> getActionsOrder(List<FieldSearch> fields, Set<ActionTypeDataMiningEnum> disregardActions, List<OrderSearch> order, Long limit){
+		if(fields != null && fields.size() > 0){
+			String squery = "SELECT a FROM ActionDataMining a WHERE ";
+			int count = 0;
+			for(FieldSearch f : fields){
+				count++;
+				squery += " " + f.getField() + " " + f.getComparator().getDesc() + " :" + f.getAlias() + " ";
+				if(fields.size() > count){
+					squery += " AND ";
+				}
+			}
+			if(disregardActions != null && disregardActions.size() > 0){
+				count = 0;
+				squery += " AND sActionType NOT IN (";
+				for(ActionTypeDataMiningEnum da : disregardActions){
+					count++;
+					squery += "'" + da.getAction() + "' ";
+					if(disregardActions.size() > count){
+						squery += ",";
+					}
+				}
+				squery += ") ";
+			}
+			//ordenar aqui pode causar problemas, pois ao buscar eventos mais recentes, traz null pointer
+			//squery += " ORDER BY a.sTime ASC";
+			count = 0;
+			if (order != null) {
+				squery += " ORDER BY " ;
+				for(OrderSearch f : order){
+					count++;
+					squery += f.getField() + " "; 
+					squery += f.isAscending() ? " ASC " : " DESC ";	
+					if(fields.size() > count){
+						squery += " , ";
+					}
+				}							
+			}			
+			if (limit != null) {
+				squery += " LIMIT " + limit;
+			}			
+			//System.out.println(squery);
+			
+			Query query = entityManager.createQuery(squery);
+			for(FieldSearch f : fields){
+				query.setParameter(f.getAlias(), f.getValue());
+			}
+			
+			try {
+				query.setMaxResults(800000);
+				return query.getResultList();
+			} catch (NoResultException e) {}
+		}
+		return null;
+	}	
+	/*FIN MILL*/
 	
 	@SuppressWarnings("unchecked")
 	public List<CountActionsAux> getCountActionsByRestrictions(FieldSearch fieldGroup, List<FieldSearch> fieldsSearch, OrderSearch order){

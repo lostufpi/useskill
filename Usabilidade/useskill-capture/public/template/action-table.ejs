@@ -30,7 +30,11 @@ function timeConverter(t){
       <th>ROLE</th>
       <th>JHM</th>
       <th>CLIENT</th>
-      <th>VERSION</th>
+      <!–– MILL SE ELIMINO VERSION Y SE AUMENTARON  TAGS -->
+      <th>USERAGENT</th>
+      <th>MOBILECONF</th>      
+      <th>DURATION</th>
+
     </tr>
   </thead>
   <tbody>
@@ -55,7 +59,11 @@ function timeConverter(t){
             <%  if(action.sSectionJhm){ %><%= action.sSectionJhm %><% } %>
         </td>
         <td><%= action.sClient+ "[" + action.sVersion + "]" %></td>
-        <td><%= action.sClient %></td>
+        <!–– MILL SE ELIMINO VERSION Y SE AUMENTARON 3 TAGS -->
+        <td><%= action.sUserAgent %></td>
+        <td><%= action.sMobileConf %></td>        
+        <td><%= action.sDuration %></td>
+
       </tr>
       <% }); %>
     </tbody>

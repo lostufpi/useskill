@@ -1,5 +1,5 @@
 module.exports = function(sequelize, DataTypes) {
-	var ActionOracle = sequelize.define('ActionOracle', {
+	var ActionDataMining = sequelize.define('ActionDataMinings', {
 			sActionType: DataTypes.STRING,
 			sContent: DataTypes.TEXT,
 			sPosX: DataTypes.BIGINT,
@@ -34,12 +34,16 @@ module.exports = function(sequelize, DataTypes) {
 			sDeleted: {
 				type: DataTypes.BOOLEAN,
 				defaultValue: false
-			}
+			},
+			sMobileConf: DataTypes.STRING, //MILL
+			sMobile: DataTypes.INTEGER,	//MILL
+			sDuration: DataTypes.INTEGER	//MILL
+
 	  	}, {
 	    associate: function(models) {
 	   		//Action.hasMany(models.Task)
 	    }
 	});
 
-  	return ActionOracle;
+  	return ActionDataMining;
 }

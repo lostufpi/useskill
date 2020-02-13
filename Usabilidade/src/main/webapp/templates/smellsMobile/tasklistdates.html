@@ -1,0 +1,94 @@
+<div class="container-padding-left">
+	
+		<ul class="breadcrumb">
+			<li>
+				<a ng-href="/"> 
+					{{ 'inicio' | translate}}
+				</a>
+				<span class="divider">/</span>
+			</li>
+			<li>
+				<a ng-href="#/testes/"> 
+					{{ 'datamining' | translate}} - {{ 'datamining.testes.list' | translate}}
+				</a>
+				<span class="divider">/</span>
+			</li>
+			<!-- 
+			<li>
+				<a ng-href="#/testes/{{smellCtrl.test.id}}"> 
+					{{ 'datamining.testes.details' | translate}}
+				</a>
+				<span class="divider">/</span>
+			</li> 
+			<li class="active">{{ 'datamining.testes.evaluation' | translate}}</li>-->
+				
+		<li>{{ 'datamining.smells.testes.mobile.principal' | translate}}</li>
+		</ul>	
+		<!-- <li class="active">{{ smellCtrl.actionTitle }}</li> -->
+		
+		<usdm-messages-alert></usdm-messages-alert>
+	    
+		<div class="row show-grid">
+		    <div class="span4">
+		    	<div class="usdm-box">
+		    		<h2 class="usdm-box-header">
+			    		{{ 'datamining.testes.details' | translate}}
+		            </h2>
+		            
+		            <div class="usdm-box-body">
+			            <dl>
+			            	<dt>{{ 'datamining.testes.title' | translate}}:</dt>
+			            	<dd>
+			            		{{smellCtrl.test.title}}
+			            		<a class="btn pull-right" ng-href="#/testes/editar/{{smellCtrl.test.id}}" title="{{ 'datamining.edit' | translate}}"><span class="icon-edit"></span> {{ 'datamining.edit' | translate }}</a>
+			            		<div class="clear-both"></div>
+			            	</dd>
+			            </dl>
+			            <dl>
+			            	<dt>{{ 'datamining.testes.abbrev' | translate}}:</dt>
+			            	<dd>{{smellCtrl.test.clientAbbreviation}}</dd>
+			            </dl>
+			            <dl>
+			            	<dt>{{ 'datamining.testes.url' | translate}}:</dt>
+			            	<dd>{{smellCtrl.test.urlSystem}}</dd>
+			            </dl>
+			            
+		            </div>
+		    	</div>
+		    </div>
+	        <div class="span8">
+	        	
+	        	<!-- TASKS CRUD -->
+	        	<div class="usdm-clickable-box" ng-class="{'usdm-clickable-box--active': smellCtrl.showSmellsMobile}">
+	            	<h2 class="usdm-title-collapse" ng-click="smellCtrl.showSmellsMobile =! smellCtrl.showSmellsMobile">
+	            		{{ 'datamining.smells.testes.mobile.crud' | translate}}
+	            	</h2>
+	            	<div class="usdm-clickable-box-content usdm-animate-show-hide" ng-show="smellCtrl.showSmellsMobile">
+		            	<h2>
+			            	{{ 'datamining.smells.testes.mobile.smells' | translate}}
+			            	<a ng-hide="smellCtrl.test.isControl" class="btn btn-primary pull-right" ng-href="#/testes/{{smellCtrl.test.id}}/smells/mobile/new">{{ 'datamining.smells.testes.mobile.new' | translate}}</a> 
+			            </h2>
+			            <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered dinamic-table" style="background-color: white" ts-wrapper>
+			                <thead>
+			                    <tr>
+			                        <th ts-criteria="title|lowercase" ts-default="ascending">{{ 'datamining.smells.testes.mobile.title' | translate }}</th>
+			                    </tr>
+			                </thead>
+			                <tbody>
+		                        <tr ng-repeat="smell in smellCtrl.smells | orderBy:'id'">
+		                            <td class="td-link"><a ng-href="#/testes/{{smellCtrl.test.id}}/smells/mobile/{{smell.id}}">{{smell.sName}}</a></td>
+		                        </tr>
+			                </tbody>
+			            </table>
+	            	</div>
+	            </div>
+	            
+	            <!-- Deteccion de usability smells en mobiles -->
+	            <a class="usdm-clickable-box" ng-href="#/testes/{{smellCtrl.test.id}}/smells/detectionMobileList">
+		            	<h2>{{ 'datamining.smells.testes.detectionMobile' | translate}}</h2>
+		        </a>        
+	        	
+	        </div>
+	    </div>	    
+
+    </div>

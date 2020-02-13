@@ -5,7 +5,7 @@
 	<groupId>br.com.ufpi.useskill</groupId>
 	<artifactId>UseSkill</artifactId>
 	<packaging>war</packaging>
-	<version>1.6.3</version>
+	<version>1.6.4</version>
 	<name>UseSkill</name>
 
 	<properties>
@@ -40,6 +40,13 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.1.1</version>
 			</plugin>
+			<!-- <plugin>  
+			        <artifactId>maven-surefire-plugin</artifactId>  
+			        <version>2.1.1</version>  
+			        <configuration>  
+			          <skipTests>true</skipTests>  
+			        </configuration>  
+			</plugin> -->
 			<plugin>
 				<groupId>org.mortbay.jetty</groupId>
 				<artifactId>maven-jetty-plugin</artifactId>
@@ -75,23 +82,24 @@
 	</repositories>
 	<dependencies>
 		<dependency>
+			<groupId>br.com.ufpi.useskill</groupId>
+			<artifactId>SPMF</artifactId>
+			<scope>system</scope>
+			<version>0.0.1</version>
+			<systemPath>${web.lib}/SPMF-0.0.1.jar</systemPath>
+		</dependency>
+		<dependency>
 			<groupId>jFuzzyLogic</groupId>
 			<artifactId>jFuzzyLogic</artifactId>
 			<scope>system</scope>
 			<version>2.1.2</version>
 			<systemPath>${web.lib}/jFuzzyLogic.jar</systemPath>
-		</dependency>
+		</dependency>			
 		<dependency>
 			<groupId>org.functionaljava</groupId>
 			<artifactId>functionaljava</artifactId>
 			<version>3.1</version>
 		</dependency>
-		<dependency>
-			<groupId>br.com.ufpi.useskill</groupId>
-			<artifactId>SPMF</artifactId>
-			<version>0.0.1</version>
-		</dependency>
-		
 				
 		<!-- Report (https://github.com/wpivotto/vraptor-jasperreport) -->
 		<dependency>
@@ -238,17 +246,20 @@
 			<artifactId>hibernate-c3p0</artifactId>
 			<version>3.6.7.Final</version>
 <!-- 			<version>4.1.1.Final</version> -->
-		</dependency>
-		
+		</dependency>		
 		<dependency>
 			<groupId>javax.sql</groupId>
 			<artifactId>jdbc-stdext</artifactId>
+			<scope>system</scope>
 			<version>2.0</version>
+			<systemPath>${web.lib}/jdbc-stdext-2.0.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>javax.transaction</groupId>
 			<artifactId>jta</artifactId>
+			<scope>system</scope>
 			<version>1.0.1B</version>
+			<systemPath>${web.lib}/jta-1.0.1b.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
@@ -294,14 +305,16 @@
 		<dependency>
 		    <groupId>org.jgrapht</groupId>
 		    <artifactId>jgrapht-core</artifactId>
-		    <version>1.0.1</version>
+		    <!--MILL<version>1.0.1</version> -->
+		    <version>0.9.0</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
 		<dependency>
 		    <groupId>com.google.guava</groupId>
 		    <artifactId>guava</artifactId>
-		    <version>22.0</version>
+		    <!--MILL <version>22.0</version> -->
+		    <version>20.0</version>
 		</dependency>
 		
 	</dependencies>

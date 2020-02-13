@@ -1,5 +1,6 @@
 package br.ufpi.util;
 
+
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.File;
@@ -9,9 +10,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+//MILL import java.nio.file.Files;
+//MILL import java.nio.file.Path;
+//MILL import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -25,11 +26,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+//MILL import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.TransformerUtils;
@@ -43,7 +45,7 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.CycleDetector;
-import org.jgrapht.alg.cycle.HawickJamesSimpleCycles;
+//MILL import org.jgrapht.alg.cycle.HawickJamesSimpleCycles;
 import org.jgrapht.alg.cycle.SzwarcfiterLauerSimpleCycles;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedPseudograph;
@@ -57,14 +59,14 @@ import com.google.common.collect.Multisets;
 
 import br.ufpi.datamining.models.ActionDataMining;
 import br.ufpi.datamining.models.PageViewActionDataMining;
-import br.ufpi.datamining.models.aux.BarChart;
-import br.ufpi.datamining.models.aux.SessionGraph;
-import br.ufpi.datamining.models.aux.SessionResultDataMining;
-import br.ufpi.datamining.models.aux.StackedAreaChart;
-import br.ufpi.datamining.models.aux.TaskSmellAnalysis;
-import br.ufpi.datamining.models.aux.TaskSmellAnalysisGroupedResult;
-import br.ufpi.datamining.models.aux.TaskSmellAnalysisResult;
-import br.ufpi.datamining.models.aux.XYSerie;
+import br.ufpi.datamining.models.auxiliar.BarChart;
+import br.ufpi.datamining.models.auxiliar.SessionGraph;
+import br.ufpi.datamining.models.auxiliar.SessionResultDataMining;
+import br.ufpi.datamining.models.auxiliar.StackedAreaChart;
+import br.ufpi.datamining.models.auxiliar.TaskSmellAnalysis;
+import br.ufpi.datamining.models.auxiliar.TaskSmellAnalysisGroupedResult;
+import br.ufpi.datamining.models.auxiliar.TaskSmellAnalysisResult;
+import br.ufpi.datamining.models.auxiliar.XYSerie;
 import br.ufpi.datamining.models.enums.SessionClassificationDataMiningEnum;
 import br.ufpi.datamining.repositories.ActionDataMiningRepository;
 
@@ -435,6 +437,146 @@ public class UsabilitySmellDetector {
 		}
 		return new BarChart("datamining.smells.testes.statistics.urlelementcountchart", "datamining.smells.testes.statistics.urls", "datamining.smells.testes.diffelementcount", sortedMap(highestElementCountUrls), elementsAttributes);
 	}
+	
+	//MILL
+	/**
+	 * Genera el gráfico de acciones
+	 * 
+	 * @param	actions	 		listado de acciones			
+	 * @param	maxResultCount	cantidad maxima de resultados			
+	 * @return	listado de eventos con su cantidad de acciones
+	 */	
+	public BarChart generateCountChart (List<ActionDataMining> actions, int maxResultCount) {
+		List<ActionDataMining> sessionFreeActions = sessionFreeActions(actions);
+		HashMap<String, Double> highestElementCount = new LinkedHashMap<String, Double>();
+		HashMap<String, Double> highestElementCountFinal = new LinkedHashMap<String, Double>();
+		String label = null;
+		
+		for (ActionDataMining action : sessionFreeActions) {			
+			if (!(action.getsMobile()==null) && (action.getsMobile()==1)) {
+				if (action.getsActionType().indexOf("battery") == -1) {
+					label = MobileUsabilitySmellDetector.renameEvent3(action.getsActionType()); 
+					if( highestElementCount.containsKey( label ) ) {
+						highestElementCount.put(label, (double)highestElementCount.get(label)+1);
+			        }
+					else{ highestElementCount.put(label, (double)1);
+					}	
+				}
+			}					
+		}	
+		
+		ValueComparator bvc =  new ValueComparator(highestElementCount);
+        TreeMap<String,Double> sorted_map = new TreeMap<String,Double>(bvc);
+        sorted_map.putAll(highestElementCount);
+				
+		Map<String, Map<String, String>> elementsAttributes = new HashMap<String, Map<String,String>>();
+	 		if (highestElementCount.size()<maxResultCount) {
+			for (Map.Entry<String, Double> entry : highestElementCount.entrySet()) {
+				elementsAttributes.put(entry.getKey(), new LinkedHashMap<String, String>());
+				highestElementCountFinal.put(entry.getKey(), entry.getValue());
+			}
+		}
+		else {
+			for(int i = 1; i <= maxResultCount; i ++){
+				Entry<String, Double> entry = sorted_map.pollFirstEntry();
+	            highestElementCountFinal.put(entry.getKey(), entry.getValue());
+				elementsAttributes.put(entry.getKey(), new LinkedHashMap<String, String>());			
+	        }
+		}
+		return new BarChart("datamining.smells.testes.actioncountmobile", "datamining.smells.testes.mobileevents", "datamining.smells.testes.actioncount", sortedMap(highestElementCountFinal), elementsAttributes);
+	}	
+	
+	/**
+	 * Genera el gráfico de contexto
+	 * 
+	 * @param	actions	 		listado de acciones			
+	 * @param	maxResultCount	cantidad maxima de resultados			
+	 * @return	listado de contextos con su cantidad de acciones
+	 */	
+	public BarChart generateContextChart (List<ActionDataMining> actions, int maxResultCount) {
+		List<ActionDataMining> sessionFreeActions = sessionFreeActions(actions);
+		HashMap<String, Double> highestElementCount = new LinkedHashMap<String, Double>();
+		HashMap<String, Double> highestElementCountFinal = new LinkedHashMap<String, Double>();
+		String[] parts = null;
+		String res = null;
+		String browser = null;
+		String os = null;
+		/*String grade = null;
+		String version = null;*/
+		String tipo = null;
+		String total = null;
+		
+		for (ActionDataMining action : sessionFreeActions) {			
+			if (!(action.getsMobile()==null) && (action.getsMobile()==1)) {
+				if (action.getsActionType().indexOf("battery") == -1) {	
+					browser = action.getsUserAgent();
+					parts = action.getsMobileConf().split(",");
+					tipo = parts[0].substring(parts[0].indexOf(":") + 1);
+					os = parts[1].substring(parts[1].indexOf(":") + 1);
+					/*grade = parts[2];
+					version = parts[3];*/
+					res = parts[5].substring(15) +"x"+ parts[6].substring(16);
+					if ((tipo==null) && (os.indexOf("Android")>=1)) {
+						tipo = "android";
+					}				
+					//total = tipo +" | "+ os +" | "+ grade +" | "+ version +" | "+ browser +" | "+ res;
+					total = tipo +" | "+ os +" | "+ browser +" | "+ res;
+					
+					if( highestElementCount.containsKey( total ) ) {
+						highestElementCount.put(total, (double)highestElementCount.get(total)+1);
+			        }
+					else{ highestElementCount.put(total, (double)1);
+					}	
+				}
+			}					
+		}
+		
+		ValueComparator bvc =  new ValueComparator(highestElementCount);
+        TreeMap<String,Double> sorted_map = new TreeMap<String,Double>(bvc);
+        sorted_map.putAll(highestElementCount);
+				
+		Map<String, Map<String, String>> elementsAttributes = new HashMap<String, Map<String,String>>();
+		if (highestElementCount.size()<maxResultCount) {
+			for (Map.Entry<String, Double> entry : highestElementCount.entrySet()) {
+				elementsAttributes.put(entry.getKey(), new LinkedHashMap<String, String>());
+				highestElementCountFinal.put(entry.getKey(), entry.getValue());
+			}
+		}
+		else {
+			for(int i = 1; i <= maxResultCount; i ++){
+				Entry<String, Double> entry = sorted_map.pollFirstEntry();
+	            highestElementCountFinal.put(entry.getKey(), entry.getValue());
+				elementsAttributes.put(entry.getKey(), new LinkedHashMap<String, String>());			
+	        }
+		}
+		return new BarChart("datamining.smells.testes.mobilecontext", "datamining.smells.testes.mobileevents", "datamining.smells.testes.actioncount", sortedMap(highestElementCountFinal), elementsAttributes);
+	}	
+	
+	/**
+	 * Implementa la clase comparator
+	 */
+	class ValueComparator implements Comparator<String> {
+		 
+        Map<String, Double> base;
+        public ValueComparator(HashMap<String, Double> map) {
+            this.base = map;
+        }
+        /**
+    	 * Compara dos string
+    	 * 
+    	 * @param	a	string 1			
+    	 * @param	b	string 2			
+    	 * @return	retorna 1 si son iguales
+    	 */
+        public int compare(String a, String b) {
+            if (base.get(a) >= base.get(b)) {
+                return -1;
+            } else {
+                return 1;
+            }
+        }
+    }	
+	//FIN MILL
 	
 	//*********************************************************************************************
 	//************************** MÉTODOS DE DETECÇÃO DE USABILITY SMELLS **************************
@@ -863,7 +1005,8 @@ public class UsabilitySmellDetector {
 					elementPosition++;
 					formattedUrlElementsIds.add("\n" + elementPosition + " - " + element);
 				}
-				urlInfo.put("datamining.smells.testes.elements", String.join("", formattedUrlElementsIds));
+				//MILL urlInfo.put("datamining.smells.testes.elements", String.join("", formattedUrlElementsIds));
+				//MILL urlInfo.put("datamining.smells.testes.elements", formattedUrlElementsIds);
 				detections.put(url+" |  | ", urlInfo);
 			}
 		}
@@ -1358,11 +1501,11 @@ public class UsabilitySmellDetector {
 		List<String> vertices = new ArrayList<String>();
 		String edges = graph.edgeSet().toString().replace(" ", "");
 		vertices.add(edges.substring(1, edges.length()-1));
-		Path file = Paths.get("vertices.txt");
+		/*MILL Path file = Paths.get("vertices.txt");
 		Files.write(file, vertices, Charset.forName("UTF-8"));
 		
         executeCommand("python graph_drawer.py vertices.txt");
-        new File("grafo.png").renameTo(new File(folderName + "/" + graphName + ".png"));
+        new File("grafo.png").renameTo(new File(folderName + "/" + graphName + ".png"));*/
 	}
 	
 	public List<TaskSmellAnalysis> detectLaboriousTasksDeprecated(List<TaskSmellAnalysis> tasks, int maxActionCount, long maxTime) throws IOException{

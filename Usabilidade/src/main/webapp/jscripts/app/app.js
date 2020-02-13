@@ -236,6 +236,60 @@ angular.module('useskill',
 		    }
 	    })
 	    
+	    /*Cambios MILL*/
+	    /*PAG PRINCIPAL*/
+	    .when('/testes/:testId/smells/detectionMobile', {
+			controller:'SmellsMobileController as smellCtrl',
+			templateUrl:config[env].apiUrl+'/templates/smellsMobile/tasklistdates.html',
+			resolve: {
+				test: function (ServerAPI, $route) {
+		        	return ServerAPI.getTest($route.current.params.testId);
+		        },
+		        smells: function (ServerAPI, $route) {
+		        	return ServerAPI.getSmellMobile($route.current.params.testId);
+		        }
+		    }
+	    })
+	    /*CREA UNO */
+	    .when('/testes/:testId/smells/mobile/new', {
+			controller:'NewSmellsMobileController as smellCtrl',
+			templateUrl:config[env].apiUrl+'/templates/smellsMobile/create.html',
+			resolve: {
+				test: function (ServerAPI, $route) {
+					return ServerAPI.getTest($route.current.params.testId);
+		        }
+		    }
+	    })
+	    
+	    /*EDITA UNO */
+	    .when('/testes/:testId/smells/mobile/:smellId', {
+			controller:'EditSmellsMobileController as smellCtrl',
+			templateUrl:config[env].apiUrl+'/templates/smellsMobile/create.html',
+			resolve: {				
+				test: function (ServerAPI, $route) {
+		        	return ServerAPI.getTest($route.current.params.testId);
+		        },
+		        smell: function (ServerAPI, $route) {
+		        	return ServerAPI.getSmellMobilebyId($route.current.params.testId, $route.current.params.smellId);
+		        }
+		    }
+	    })   
+	    
+	    /*VISUALIZA OPCIONES PARA MOSTRAR LOS MOBILE USABILITY SMELLS*/
+	    .when('/testes/:testId/smells/detectionMobileList', {
+			controller:'SmellsDetectionMobileController as smellCtrl',
+			templateUrl:config[env].apiUrl+'/templates/smellsMobile/detectionform.html',
+			resolve: {
+				test: function (ServerAPI, $route) {
+		        	return ServerAPI.getTest($route.current.params.testId);
+		        },
+		        smells: function (ServerAPI, $route) {
+		        	return ServerAPI.getSmellMobile($route.current.params.testId);
+		        }
+		    }
+	    })
+	    /*Fin MILL*/
+	    
 	    .when('/error', {
 	        templateUrl: config[env].apiUrl+'/templates/error.html',
 	        controller: 'ErrorController'
@@ -473,7 +527,21 @@ angular.module('useskill',
         },
         changeSmellParameter: function(obj) {
         	return doRequest('POST', '/datamining/testes/smells/parameters/change', obj);
+        },
+        /*CAMBIOS MILL*/
+        getSmellMobile: function(testId){
+        	return doRequest('GET', '/datamining/testes/'+testId+'/smells/detectionMobile');
+        },
+        getSmellMobilebyId: function(testId,smellId){
+        	return doRequest('GET', '/datamining/testes/'+testId+'/smells/detectionMobile/get/'+smellId);
+        },        
+        saveSmellMobile: function(obj){
+        	return doRequest('POST', '/datamining/testes/smells/mobile/save',obj);
+        },
+        detectSmellMobile: function(obj){
+        	return doRequest('POST', '/datamining/testes/smells/mobile/detection', obj);
         }
+        /*FIN MILL*/
         
     };
 }])
@@ -498,9 +566,24 @@ angular.module('useskill',
 				action.url != null && action.url != "") {
 				return true;
 			}
+			return false;			
+		},
+		//MILL
+		smell : function(smell) {
+			if (smell.sName != null && smell.sName != "" &&
+				smell.sContent != null && smell.sContent != "") {
+				for (var a in smell.detail) {
+					if (smell.detail[a].sEvent == null || smell.detail[a].sEvent == "" ||
+						smell.detail[a].sQuantity == null || smell.detail[a].sQuantity == "") {
+						return false;
+					}
+				}				
+				return true;
+			}
 			return false;
-			
 		}
+		//FIN MILL
+		
 	};
 	return validate;
 })
@@ -578,7 +661,9 @@ angular.module('useskill',
 	 	    {name:'datamining.smells.testes.layercount', value:'5'},
 	 	    {name:'datamining.smells.testes.attemptcount', value:'6'},
    			{name:'datamining.smells.testes.repetitioncount', value:'7'},
-   			{name:'datamining.smells.testes.diffelementcount', value:'8'}
+   			{name:'datamining.smells.testes.diffelementcount', value:'8'},
+   			{name:'datamining.smells.testes.actioncountmobile', value:'9'}, //MILL
+   			{name:'datamining.smells.testes.mobilecontext', value:'91'} //MILL
 	 	]
 	};
 })
@@ -595,6 +680,40 @@ angular.module('useskill',
 	 	]
 	};
 })
+
+//CAMBIOS MILL
+.factory("TouchEventsEnum", function(){
+	return {
+		events : [
+	 	    {name:'Double Tap', value:'doubletap'},
+	 	    {name:'Single Tap', value:'singletap'},
+	 	    {name:'Press', value:'press'},
+	 	    {name:'Swipe Up', value:'swipeup'},
+	 	    {name:'Swipe Down', value:'swipedown'},
+	 	    {name:'Swipe Left', value:'swipeleft'},
+	 	    {name:'Swipe Rigth', value:'swiperigth'},
+	 	    {name:'Orientation Change', value:'orientationchange'},
+	 	    {name:'Pinch In', value:'pinchin'},
+	 	    {name:'Pinch Out', value:'pinchout'},
+	 	    {name:'Pinch', value:'pinch'},
+	 	    {name:'Swipe', value:'swipe'},
+	 	    {name:'Focus', value:'focusout'}
+	 	]
+	};
+})
+
+.factory("TouchEventsDurationEnum", function(){
+	return {
+		durations : [
+	 	    {name:'zero or more times', value:'*'},
+	 	    {name:'one or more times', value:'+'},
+	 	    {name:'no or one times', value:'?'},
+	 	    {name:'X number of times', value:'{X}'},
+	 	    {name:'between X and Y times', value:'{X,Y}'}
+	 	]
+	};
+})
+//FIN MILL
 
 .controller('ErrorController', function($scope, cfpLoadingBar, config, env) {
 	console.log('error controller');
@@ -627,7 +746,8 @@ angular.module('useskill',
 	smellCtrl.ignoredUrls = [];
 	
 	for (var i = 0; i < Object.keys(SmellsMetricsEnum.metrics).length; i++) {
-		smellCtrl.metricsSelected.push(i+1);
+		/*smellCtrl.metricsSelected.push(i+1); MILL*/
+		smellCtrl.metricsSelected.push(SmellsMetricsEnum.metrics[i].value);
 	}
 	
 	var obj = angular.toJson({
@@ -777,6 +897,48 @@ angular.module('useskill',
 						});
 					}
 					
+					//MILL
+					if (charts.barCharts[i].description ==  'datamining.smells.testes.actioncountmobile'){
+						smellCtrl.barCharts.push({
+							"description" : charts.barCharts[i].description,
+							"statisticsOptions" : {
+					            chart: {
+					                type: 'discreteBarChart',
+					                height: 450,
+					                margin : {
+					                    top: 20,
+					                    right: 20,
+					                    bottom: 50,
+					                    left: 55
+					                },
+					                x: function(d){return d.label;},
+					                //y: function(d){return d.value + (1e-10);},
+					                y: function(d){return d.value;},
+					                showValues: true,
+					                valueFormat: function(d){
+					                    //return d3.format(',.1f')(d);
+					                    return d3.format(',.0f')(d);
+					                },
+					                duration: 500,
+					                xAxis: {
+					                    axisLabel: $filter('translate')(charts.barCharts[i].descX)
+					                },
+					                yAxis: {
+					                    axisLabel: $filter('translate')(charts.barCharts[i].descY),
+					                    axisLabelDistance: -10
+					                },
+					                showXAxis: true,
+					                useInteractiveGuideline: false,
+					                interactive: true
+					            }
+					        },
+					        "statisticsData" : [{
+					        	key : charts.barCharts[i].description,
+					        	values : statistics
+					        }]
+						});
+					}
+					else if (charts.barCharts[i].description ==  'datamining.smells.testes.mobilecontext'){
 					smellCtrl.barCharts.push({
 						"description" : charts.barCharts[i].description,
 						"statisticsOptions" : {
@@ -817,6 +979,68 @@ angular.module('useskill',
 				        					}
 				                		}
 				                		var idElements = d.data.label.split(" | ");
+				                		var html = '<div style="padding: 8px;"><b>' + $filter('translate')('datamining.smells.testes.mobiletype') + '</b>: ' + idElements[0];
+				                		if (idElements[1] != "")
+				                			html += '<br><b>' + $filter('translate')('datamining.smells.testes.mobileos') + '</b>: ' + idElements[1];
+				                		if (idElements[2] != "")
+				                			html += '<br><b>' + $filter('translate')('datamining.smells.testes.mobilebrowser') + '</b>: ' + idElements[2];
+				                		if (idElements[3] != "")
+				                			html += '<br><b>' + $filter('translate')('datamining.smells.testes.mobileresolution') + '</b>: ' + idElements[3];
+				                		return html += '</div>';
+				                	}
+				                }
+				            }
+				        },
+				        "statisticsData" : [{
+				        	key : charts.barCharts[i].description,
+				        	values : statistics
+				        }]
+					});
+					}
+					else {
+					//FIN MILL
+					
+					smellCtrl.barCharts.push({
+						"description" : charts.barCharts[i].description,
+						"statisticsOptions" : {
+				            chart: {
+				                type: 'discreteBarChart',
+				                height: 450,
+				                margin : {
+				                    top: 20,
+				                    right: 20,
+				                    bottom: 50,
+				                    left: 55
+				                },
+				                x: function(d){return d.label;},
+				                y: function(d){return d.value + (1e-10);},
+				                showValues: true,
+				                valueFormat: function(d){
+				                    return d3.format(',.1f')(d);
+				                },
+				                duration: 500,
+				                xAxis: {
+				                    axisLabel: $filter('translate')(charts.barCharts[i].descX)
+				                },
+				                yAxis: {
+				                    axisLabel: $filter('translate')(charts.barCharts[i].descY),
+				                    axisLabelDistance: -10
+				                },
+				                showXAxis: false,
+				                //showXAxis: true,
+				                useInteractiveGuideline: false,
+				                interactive: true,
+				                tooltip: {
+				                	enabled: true,
+				                	contentGenerator: function(d) {
+				                		var actionAttributes;
+				                		for (var i = 0; i < charts.barCharts.length; i++) {
+				        					if(charts.barCharts[i].actionsAttributes[d.data.label] != undefined) {
+				        						actionAttributes = charts.barCharts[i].actionsAttributes[d.data.label];
+				        						break;
+				        					}
+				                		}
+				                		var idElements = d.data.label.split(" | ");
 				                		var html = '<div style="padding: 8px;"><b>' + $filter('translate')('datamining.smells.testes.place') + '</b>: ' + idElements[0];
 				                		if (idElements[1] != "")
 				                			html += '<br><b>' + $filter('translate')('datamining.smells.testes.element') + '</b>: ' + idElements[1];
@@ -835,6 +1059,8 @@ angular.module('useskill',
 				        	values : statistics
 				        }]
 					});
+					
+					}
 					
 				}
 //				$timeout(function(){
@@ -1119,6 +1345,469 @@ angular.module('useskill',
 	}
 	
 })
+
+/*CAMBIOS MILL*/
+
+.controller('SaveSmellsMobileController', function($scope, $filter, smell, test, ServerAPI, ShowMessage, ValidateService) {
+	
+	var smellCtrl = this;
+	smellCtrl.smell = smell;
+	smellCtrl.test = test;
+	
+	smellCtrl.save = function() {		
+		var smell = angular.toJson({
+			'smell' : this.smell
+		});		
+		if (ValidateService.smell(smellCtrl.smell)) {
+			ServerAPI.saveSmellMobile(smell).then(function(data) {	
+				ShowMessage.success('datamining.tasks.new.success');
+			}, function(data) {
+				console.log(data);
+			});
+			
+		} else {
+			ShowMessage.error('datamining.validate.default');
+		}		
+	};		
+	
+	smellCtrl.incluir = function (details) {
+		var len = details.length;
+		var ultIdSmellPattern = details[len -1].idSmellPattern;
+		var detail={ idSmellPattern:ultIdSmellPattern,
+					sEvent:"",
+			      	sQuantity:""
+			    	} ;
+		smellCtrl.smell.detail.push(detail);
+    };
+    
+    smellCtrl.incluirPadrao = function (details) {
+    	var len = details.length;
+		var ultIdSmellPattern = parseInt(details[len -1].idSmellPattern) + 1;		
+		var detail={ idSmellPattern:ultIdSmellPattern,
+					sEvent:"",
+			      	sQuantity:""
+			    	} ;
+		smellCtrl.smell.detail.push(detail);
+    };
+	
+	smellCtrl.removeRow = function (details) {
+        var detailArray = [];
+        angular.forEach(details, function (value) {
+            if (!value.Remove) {
+                detailArray.push(value);
+            }
+        });
+        smellCtrl.smell.detail = detailArray;
+    };    
+
+	smellCtrl.gestures = '';	
+	smellCtrl.durations = '';
+	/*smellCtrl.gestures = TouchEventsEnum.events;	
+	smellCtrl.durations = TouchEventsDurationEnum.durations;*/	
+	
+})
+
+.controller('NewSmellsMobileController', function($scope, test, $controller, $filter, TouchEventsEnum, TouchEventsDurationEnum) {
+	
+	var smellCtrl = this;	
+	smellCtrl.actionTitle = $filter('translate')('datamining.smells.testes.mobile.new');		
+	var details=[{idSmellPattern:"1", sEvent:"", sQuantity:""}];	
+	smellCtrl.smell = { sName:"", sContent:"", detail:[]} 	
+	smellCtrl.smell.detail = details;		
+	/*angular.extend(this, $controller('SaveSmellsMobileController', {$scope: $scope, smell: smellCtrl.smell}));*/
+	angular.extend(this, $controller('SaveSmellsMobileController', {$scope: $scope, smell: smellCtrl.smell, test: test}));
+})
+
+.controller('EditSmellsMobileController', function($scope, smell, test, $controller, $filter, TouchEventsEnum,TouchEventsDurationEnum) {
+	var smellCtrl = this;
+	smellCtrl.smell = JSON.parse(smell.data.string);
+	smellCtrl.actionTitle = $filter('translate')('datamining.smells.testes.mobile.edit');	
+	angular.extend(this, $controller('SaveSmellsMobileController', {$scope: $scope, smell: JSON.parse(smell.data.string), test: test}));	
+})
+
+.controller('SmellsMobileController', function(test, smells, UtilsService, SmellsEnum, ServerAPI, $filter, $scope) {
+	var smellCtrl = this;
+	smellCtrl.test = JSON.parse(test.data.string);
+	smellCtrl.smells = JSON.parse(smells.data.string);
+	smellCtrl.showSmellsMobile = false;			
+})
+
+.controller('SmellsDetectionMobileController', function(test, smells, UtilsService, ServerAPI, $filter, $scope) {
+	var smellCtrl = this;
+	smellCtrl.test = JSON.parse(test.data.string);
+	smellCtrl.smells = JSON.parse(smells.data.string);
+	smellCtrl.showSmellsMobile = false;
+	
+	smellCtrl.smellsSelected = [];
+	smellCtrl.tasksSelected = [];
+	smellCtrl.nodesDesc = [];
+	smellCtrl.nodesDescTime = [];
+	smellCtrl.showlist = [];
+
+	smellCtrl['smell-data-graph-time'] = [];
+	smellCtrl['smell-data-graph'] = [];
+	
+	smellCtrl.tamMin = 4;
+	smellCtrl.tamMax = 5;
+	smellCtrl.cantRep = 3;
+	
+	for (var i = 0; i < smellCtrl.smells.length; i++) {
+		smellCtrl.smellsSelected.push(smellCtrl.smells[i].id);
+	}
+	for (var i = 0; i < smellCtrl.test.tasks.length; i++) {
+		smellCtrl.tasksSelected.push(smellCtrl.test.tasks[i].id);
+	}
+	
+	smellCtrl.toggleSelection = function toggleSelection(id) {
+		id = parseInt(id);
+		var findIdx = -1;
+		for (var i = 0; i < smellCtrl.smellsSelected.length; i++) {
+			if (smellCtrl.smellsSelected[i] == id) {
+				findIdx = i;
+			}
+		}
+		if (findIdx == -1) {
+			smellCtrl.smellsSelected.push(id);
+		} else {
+			smellCtrl.smellsSelected.splice(findIdx, 1);
+		}
+	};
+	
+	smellCtrl.toggleTaskSelection = function toggleSelection(id) {
+		id = parseInt(id);
+		var findIdx = -1;
+		for (var i = 0; i < smellCtrl.tasksSelected.length; i++) {
+			if (smellCtrl.tasksSelected[i] == id) {
+				findIdx = i;
+			}
+		}
+		if (findIdx == -1) {
+			smellCtrl.tasksSelected.push(id);
+		} else {
+			smellCtrl.tasksSelected.splice(findIdx, 1);
+		}
+	};
+	
+	smellCtrl.view = function(){
+		var selectedSmellsPrincipal = document.getElementById("selectedSmellsPrincipal").checked;
+		var minDate = UtilsService.datepickerToTimestamp(smellCtrl.minDate);
+		var maxDate = UtilsService.datepickerToTimestamp(smellCtrl.maxDate);
+		
+		var obj = angular.toJson({
+			test: smellCtrl.test,
+			initDate: minDate,
+			endDate: maxDate,
+			cantRep: smellCtrl.cantRep,
+			tamMin: smellCtrl.tamMin,
+			tamMax: smellCtrl.tamMax,	
+			selectedSmells: smellCtrl.smellsSelected,
+			selectedTasks: smellCtrl.tasksSelected,
+			smellGeneral: selectedSmellsPrincipal
+		});
+		
+		ServerAPI.detectSmellMobile(obj).then(function(data) {			
+			smellCtrl.detectionResult = JSON.parse(data.data.string);
+		}, function(data) {
+			console.log(data);
+		});				
+	}
+	
+	smellCtrl.formattedId = function (smell, task, session) {
+		return (smell + '-' + task + '-' + session).replace(/[{()}\. ]/g, '');
+	}
+	
+	smellCtrl.formattedId2 = function (smell, task, session) {
+		var smellsParse = JSON.parse(smell);
+		return (smellsParse.sName + '-' + task + '-' + session).replace(/[{()}\. ]/g, '');
+	}
+	
+	smellCtrl.formattedId3 = function (smell, task, session) {
+		var smellsParse = JSON.parse(smell);
+		var retorna = (smellsParse.sName + '-' + task + '-' + session).replace(/[{()}\. ]/g, '');
+		var retorna2 = smellCtrl.formattedWithOutSpaces(retorna);
+		retorna2 = retorna2.replace(/[@\. ]/g, '');
+		return retorna2;
+	}
+	
+	smellCtrl.formattedWithOutSpaces = function (patron){
+		var patron2 = patron.replace(/\//g, "");
+		var patron3 = patron2.replace(/:/g, "");
+		var patron4 = patron3.replace(/\./g, "");
+		var patron5 = patron4.replace(/[{()}\. ]/g, '');
+		return (patron5.replace(/ /g, ""));
+	}
+	
+	smellCtrl.formattedPattern = function (patron, opcion) {				
+		var valores = patron.split("-")		
+		return valores[opcion];		
+	}
+	
+	smellCtrl.totalAction = function (listActions) {
+		var total = 0;
+		for( index in listActions){
+			total += 1;
+		}
+		return total;
+	}
+	
+	smellCtrl.smellName = function (smell) {
+		var smellsParse = JSON.parse(smell);		
+		return smellsParse.sName;
+	}
+	
+	smellCtrl.smellContent = function (smell) {
+		var smellsParse = JSON.parse(smell);		
+		return smellsParse.sContent;
+	}
+	
+	smellCtrl.smellPattern = function (smell) {
+		var smellsParse = JSON.parse(smell);		
+		return smellsParse.pattern;
+	}
+	
+	smellCtrl.getUser = function (listAction) {
+		var user = listAction[0].sUsername;
+		return user;
+	}
+	
+	smellCtrl.getContexto = function (listAction) {
+		var contexto = listAction[0].sMobileConf;
+		return contexto;
+	}
+	
+	smellCtrl.showGraphSmell = function(smell, taskName, session, index) {
+		var elemId = 'graph-'+ smellCtrl.formattedId3(smell, taskName, session.description)
+		var graphData = generateGraphSmells(session.graph);
+		smellCtrl.nodesDesc[index] = null;
+		smellCtrl['smell-data-graph'][index] = drawGraph(elemId, graphData, [], {}, {}, 5, false);
+		smellCtrl.resetGraph(index);
+	}
+	smellCtrl.resetGraph = function(index) {
+		smellCtrl['smell-data-graph'][index].on("selectNode", function (params) {
+      	  	var node = smellCtrl['smell-data-graph'][index].body.nodes[params.nodes[0]];
+      	  	var nodeDesc = node.options.desc.split(" | ");
+      	  	smellCtrl.nodesDesc[index] = {
+      	  			place: nodeDesc[0],
+      	  			element: nodeDesc[1],
+      	  			actiontype: nodeDesc[2],
+      	  			occurrences: node.options.value
+      	  	}
+      	  	$scope.$apply();
+        });
+		smellCtrl['smell-data-graph'][index].on("selectEdge", function (params) {
+    		var edge = smellCtrl['smell-data-graph'][index].body.edges[params.edges[0]];
+    		var from = smellCtrl['smell-data-graph'][index].body.nodes[edge.options.from].options.desc.split(" | ");
+    		var to = smellCtrl['smell-data-graph'][index].body.nodes[edge.options.to].options.desc.split(" | ");
+    		smellCtrl.nodesDesc[index] = {
+      	  			place: from[0] + ' --> ' + to[0],
+      	  			element: from[1] + ' --> ' + to[1],
+      	  			actiontype: from[2] + ' --> ' + to[2],
+      	  			occurrences: edge.options.value
+      	  	}
+    		$scope.$apply();
+        });
+	}
+	
+	smellCtrl.showTimelineSmell = function(smell, taskName, session, index, listeventos) {			
+		var description = 'panelVis-' + smellCtrl.formattedId3(smell, taskName, session.description);		
+		var container = document.getElementById(description);
+		
+		if(container !== null){
+	        while (container.hasChildNodes()){
+	        	container.removeChild(container.lastChild);
+	        }
+	    }	
+		var data = new vis.DataSet();
+		var options = {
+				  width: '100%',
+				  /*autoResize: 'true'*/
+				  height: '300px'/*,
+				  margin: {
+				    item: 20
+				  }*/
+				};
+		var dataSelected = new Array();
+		var eventosArr = null;
+		var sizePattern = 0;
+		
+		data.on('*', function (event, properties, senderId) {
+		    console.log('event:', event, 'properties:', properties, 'senderId:', senderId);
+		  });
+		  
+		for (var i = 0; i < session.session.actions.length; i++) {			
+			var date = moment(session.session.actions[i].time).format("YYYY-MM-DD HH:mm:ss");
+			//data.add({id: i+1, content: session.session.actions[i].action, start: date });
+			/*var duracion = session.session.actions[i].sDuration;
+			var dateFinal = moment(session.session.actions[i].time+duracion).format("YYYY-MM-DD HH:mm:ss");
+			if (duracion !=null &&duracion !=0){
+				data.add({id: i+1, content: session.session.actions[i].action, start: date , end: dateFinal});
+			}else{
+				data.add({id: i+1, content: session.session.actions[i].action, start: date });
+			}  */
+			var info = "Clase:" + session.session.actions[i].sClass + ", Elemento:" + session.session.actions[i].element + ", Contenido:" + session.session.actions[i].infoContent+ ", Tag:" + session.session.actions[i].infoTag;
+	  		data.add({id: i+1, content: session.session.actions[i].action, start: date, title: info });
+		}
+		for (var i = 0; i < listeventos.length; i++) {		
+			if ((listeventos[i])[session.session.id]!= null ){
+				eventosArr = (listeventos[i])[session.session.id].split(',');
+				for (var i = 0; i < eventosArr.length; i += 2) {
+					if (!isNaN(parseInt(eventosArr[i]))) {
+						sizePattern = parseInt(eventosArr[i+1]) - parseInt(eventosArr[i]) +1;
+						for (var l = 1; l < sizePattern+1; l++) {
+							dataSelected.push(parseInt(eventosArr[i])+l);
+						}
+					}
+				}
+			}				
+		}
+		// Create a Timeline
+		var timeline = new vis.Timeline(container, data, options);
+		timeline.setSelection(dataSelected, {focus: true, animation:true});  
+		smellCtrl['smell-data-graph-time'][index] = drawGraph(container, null, [], {}, {}, 5, false);
+		smellCtrl.resetGraphTime(index);
+	}
+	
+	smellCtrl.resetGraphTime = function(index) {
+		smellCtrl['smell-data-graph-time'][index].on("selectNode", function (params) {
+      	  	var node = smellCtrl['smell-data-graph-time'][index].body.nodes[params.nodes[0]];
+      	  	var nodeDesc = node.options.desc.split(" | ");
+      	  	smellCtrl.nodesDesc[index] = {
+      	  			place: nodeDesc[0],
+      	  			element: nodeDesc[1],
+      	  			actiontype: nodeDesc[2],
+      	  			occurrences: node.options.value
+      	  	}
+      	  	$scope.$apply();
+        });
+		smellCtrl['smell-data-graph-time'][index].on("selectEdge", function (params) {
+    		var edge = smellCtrl['smell-data-graph-time'][index].body.edges[params.edges[0]];
+    		var from = smellCtrl['smell-data-graph-time'][index].body.nodes[edge.options.from].options.desc.split(" | ");
+    		var to = smellCtrl['smell-data-graph-time'][index].body.nodes[edge.options.to].options.desc.split(" | ");
+    		smellCtrl.nodesDesc[index] = {
+      	  			place: from[0] + ' --> ' + to[0],
+      	  			element: from[1] + ' --> ' + to[1],
+      	  			actiontype: from[2] + ' --> ' + to[2],
+      	  			occurrences: edge.options.value
+      	  	}
+    		$scope.$apply();
+        });
+	}
+		
+	smellCtrl.showTimelinePattern = function(patron, listActions,listEventosAction) {			
+		var arrayDeCadenas = patron.split("-");
+		var sizePattern = 0;
+		var a, b = null;
+		var c = null;
+		
+		/*for (var l = 0; l < arrayDeCadenas.length-1; l++) {
+			if (arrayDeCadenas[l].indexOf("(") != -1){
+				a = arrayDeCadenas[l].indexOf("(");
+				b = arrayDeCadenas[l].indexOf(")")
+				c = arrayDeCadenas[l].substring(a+1, b);
+				sizePattern += parseInt(c);
+
+			} else {
+				sizePattern += 1;
+			}
+		}	*/
+		sizePattern = parseInt(arrayDeCadenas[2]);
+		
+		for( index in listActions){
+			var options = {};
+			var dataSelected = new Array();
+			var data = new vis.DataSet();
+			data.on('*', function (event, properties, senderId) {
+			    console.log('event:', event, 'properties:', properties, 'senderId:', senderId);
+			  });
+			
+			var container = document.getElementById(patron+index);
+			if(container !== null){
+		        while (container.hasChildNodes()){
+		        	container.removeChild(container.lastChild);
+		        }
+		    }	
+			var listAction = listActions[index];
+			var listEventoAc = listEventosAction[index];
+			for (var i = 0; i < listAction.length; i++) {	
+					var date = moment(listAction[i].sTime).format("YYYY-MM-DD HH:mm:ss");
+					var duracion = listAction[i].sDuration;
+					var dateFinal = moment(listAction[i].sTime+duracion).format("YYYY-MM-DD HH:mm:ss");
+					/*if (duracion !=0){
+						data.add({id: i+1, content: listAction[i].sActionType, start: date , end: dateFinal});
+					}else{
+						data.add({id: i+1, content: listAction[i].sActionType, start: date });
+					} */
+					var info = "Clase:" + listAction[i].sClass + ", Elemento:" + listAction[i].sXPath + ", Contenido:" + listAction[i].Content + ", Tag:" + listAction[i].sTag;
+      	  			data.add({id: i+1, content: listAction[i].sActionType, start: date, title: info });
+					for (var j = 0; j < listEventoAc.length; j++) {
+						if (listAction[i].id==listEventoAc[j])
+							for (var l = 1; l < sizePattern+1; l++) {
+								dataSelected.push(i+l);
+							}
+					}
+			}
+			var timeline = new vis.Timeline(container, data, options);
+			timeline.setSelection(dataSelected, {focus: true, animation:true});  	 
+		}
+	}	
+	
+	smellCtrl.exportExcel = function(resultSmellAnalysisGeneral){		
+		var csvData = '';
+		for (var i = 0; i < resultSmellAnalysisGeneral.length; i++) {
+			var patronTotal = resultSmellAnalysisGeneral[i].patron;
+			var valores = patronTotal.split("-")
+			var patron = valores[0];
+			var url = valores[1];
+			var tamano = valores[2];
+			var total = smellCtrl.totalAction(resultSmellAnalysisGeneral[i].listActions);
+			var row = url + ';' + patron + ';' + tamano + ';' + total;		 
+			csvData += row + '\r\n';
+		}
+		var a = document.createElement("a");
+	    a.setAttribute('style', 'display:none;');
+	    document.body.appendChild(a);
+	    var blob = new Blob([csvData], { type: 'text/csv' });
+	    var url= window.URL.createObjectURL(blob);
+	    a.href = url;
+	    a.download = 'ExportResultGeneral.csv';
+	    a.click();		
+	}
+	
+    smellCtrl.exportExcel2 = function(tasksMobileAnalysisResult){		
+		var csvData = '';
+		for( index in tasksMobileAnalysisResult){	
+			var smellName = smellCtrl.smellName(index);
+			var result = tasksMobileAnalysisResult[index];				
+			for (var i = 0; i < result.length; i++) {
+				var task = result[i];
+				var url = task.name;
+				var patron = task.patron;				
+				for (var k = 0; k < task.sessions.length; k++) {
+					var actions = task.sessions[k];
+					var username = actions.description;
+					var info = actions.info["datamining.smells.testes.mobile.contexto"];					
+					var info2 = actions.info["datamining.smells.testes.actioncount"];					
+					var info3 = actions.info["datamining.smells.testes.mobile.usuario"];					
+					for (var j = 0; j < actions.session.actions.length; j++) {
+						var data = actions.session.actions[j]; 
+						var row = smellName + ';' + patron +';' + url +';'+data.id+';'+username+';'+ info +';'+data.action+';'+data.element+';'+/*data.infoContent+';'+ */data.infoTag+ ';'+data.sClass+ ';'+ data.sDuration+';'+ data.infoPosX+';'+data.infoPosY+ ';'+ data.time;		 
+						csvData += row + '\r\n';
+					}
+				}
+			}
+		}		
+		var a = document.createElement("a");
+	    a.setAttribute('style', 'display:none;');
+	    document.body.appendChild(a);
+	    var blob = new Blob([csvData], { type: 'text/csv' });
+	    var url= window.URL.createObjectURL(blob);
+	    a.href = url;
+	    a.download = 'ExportResult.csv';
+	    a.click();		
+	}
+})
+/*FIN MILL*/
+
 
 //Tests Controllers
 
@@ -3512,6 +4201,26 @@ angular.module('useskill',
     }
 })
 
+/*MILL*//*
+.directive('parseInt', [function () {
+	    return {
+	        restrict: 'A',
+	        require: 'ngModel',
+	        link: function (scope, elem, attrs, controller) {
+	            controller.$formatters.push(function (modelValue) {
+	                //console.log('model', modelValue, typeof modelValue);
+	                return '' + modelValue;
+	            });
+
+	            controller.$parsers.push(function (viewValue) {
+	                //console.log('view', viewValue, typeof viewValue);
+	                return parseInt(viewValue,10);
+	            });
+	        }
+	    }
+	} ])*/
+/*FIN MILL*/
+	
 /* FILTER */
 
 .filter('msConverter', function() {

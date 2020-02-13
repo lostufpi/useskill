@@ -22,7 +22,7 @@ import br.ufpi.models.Action;
 	@NamedQuery(name = "ActionDataMining.findById", query = "SELECT a FROM ActionDataMining a WHERE a.id = :id")
 })
 @Entity  
-@Table(name="Actions")  
+@Table(name="ActionDataMinings")  
 public class ActionDataMining implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -53,6 +53,35 @@ public class ActionDataMining implements Serializable {
 	private Boolean sDeleted;
 	private Date createdAt;
 	private Date updatedAt;
+	/*CAMBIOS MILL*/
+	private Integer sMobile;
+	private String sMobileConf;
+	private Long sDuration;	
+		
+	public Integer getsMobile() {
+		return sMobile;
+	}
+
+	public void setsMobile(Integer sMobile) {
+		this.sMobile = sMobile;
+	}
+
+	public String getsMobileConf() {
+		return sMobileConf;
+	}
+
+	public void setsMobileConf(String sMobileConf) {
+		this.sMobileConf = sMobileConf;
+	}
+
+	public Long getsDuration() {
+		return sDuration;
+	}
+
+	public void setsDuration(Long sDuration) {
+		this.sDuration = sDuration;
+	}
+	/*FIN MILL*/
 	
 	public ActionDataMining(Action a) {
 		super();

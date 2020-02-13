@@ -131,7 +131,7 @@ function doSearch (req, res, callback, client) {
 			findData['where'] = {'sClient' : client };
 		}
 		
-		db.ActionOracle.findAll(findData).success(function(actions) {
+		db.ActionDataMinings.findAll(findData).success(function(actions) {
 			if (callback && typeof callback === 'function'){
 				callback.call(this, actions);
 			}

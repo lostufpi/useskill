@@ -12,7 +12,7 @@ import weka.core.Attribute;
 import weka.core.FastVector;
 import weka.core.Instance;
 import weka.core.Instances;
-import br.ufpi.datamining.models.aux.SessionResultDataMining;
+import br.ufpi.datamining.models.auxiliar.SessionResultDataMining;
 import br.ufpi.datamining.utils.StatisticsUtils;
 
 public class KMeansUtils {

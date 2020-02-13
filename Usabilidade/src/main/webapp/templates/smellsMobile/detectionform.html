@@ -1,0 +1,255 @@
+<div class="container-padding-left">
+	
+		<ul class="breadcrumb">
+			<li>
+				<a ng-href="/"> 
+					{{ 'inicio' | translate }}
+				</a>
+				<span class="divider">/</span>
+			</li>
+			<li>
+				<a ng-href="#/testes/"> 
+					{{ 'datamining' | translate }} - {{ 'datamining.testes.list' | translate }}
+				</a>
+				<span class="divider">/</span>
+			</li>
+			<li>
+				<a ng-href="#/testes/{{taskCtrl.test.id}}/smells/detectionMobile"> 
+					{{ 'datamining.smells.testes.mobile.principal' | translate}}
+				</a>
+				<span class="divider">/</span>
+			</li>
+			<li class="active">{{ 'datamining.smells.testes.detection' | translate }}</li>
+		</ul>
+		
+		<usdm-messages-alert></usdm-messages-alert>
+	    
+		<div class="row show-grid">
+		    <div class="span4">
+		    	<div class="usdm-box">
+		    		<h2 class="usdm-box-header">
+			    		{{ 'datamining.testes.details' | translate }}
+		            </h2>
+		            <div class="usdm-box-body">
+			            <dl>
+			            	<dt>{{ 'datamining.testes.title' | translate }}:</dt>
+			            	<dd>
+			            		{{smellCtrl.test.title}}
+			            		<a class="btn pull-right" ng-href="#/testes/editar/{{smellCtrl.test.id}}" title="{{ 'datamining.edit' | translate}}"><span class="icon-edit"></span> {{ 'datamining.edit' | translate }}</a>
+			            		<div class="clear-both"></div>
+			            	</dd>
+			            </dl>
+			            <dl>
+			            	<dt>{{ 'datamining.testes.abbrev' | translate }}:</dt>
+			            	<dd>{{smellCtrl.test.clientAbbreviation}}</dd>
+			            </dl>
+			            <dl>
+			            	<dt>{{ 'datamining.testes.url' | translate }}:</dt>
+			            	<dd>{{smellCtrl.test.urlSystem}}</dd>
+			            </dl>
+		            </div>
+		    	</div>
+		    </div>
+		    
+	        <div class="span8">
+	            <div class="usdm-box">
+	            	<h3 class="usdm-title-collapse">
+	            		{{ 'datamining.smells.testes.detection.title' | translate }}
+	            	</h3>
+	            	<div class="usdm-clickable-box-content usdm-animate-show-hide">
+		        		<form name="myForm" class="usdm-clickable-box-form-lite form-layout">
+							<fieldset>
+								<table class="table table-striped table-bordered table-condensed datamining-table white-table">
+					                <thead>
+					                    <tr>
+					                        <th width="60%">{{'datamining.smells.testes.detection.smellname' | translate }}</th>
+					                        <th width="15%">{{'datamining.smells.testes.evaluate' | translate }}</th>
+					                        <th width="25%">{{'datamining.smells.testes.patterns' | translate }}</th>
+					                    </tr>
+					                </thead>
+					                <tbody>
+				                        <tr ng-repeat="smell in smellCtrl.smells | orderBy:'id'">
+				                            <td>{{smell.sName}} <a href="" class="icon-info-sign" data-toggle="tooltip" data-placement="right" title={{smell.sContent}}></a>
+				                            <td class="text-center"><input type="checkbox" checked="checked" name="selectedSmells[]" value="{{smell.id}}" ng-click="smellCtrl.toggleSelection(smell.id)"></td>
+				                            <td class="text-center">
+				                            <ul>
+	                            				<li ng-repeat="value in smell.pattern">{{value}}</li>
+	                            			</ul></td>
+				                        </tr>
+					                </tbody>
+					            </table>
+					            <br>
+					            <h3>{{'datamining.smells.testes.mobile.descoberta' | translate }} </h3>
+					            <input type="checkbox" checked="checked" name="selectedSmellsPrincipal"  id="selectedSmellsPrincipal">
+								
+								<br>
+					            <div class="row-fluid">									
+									<div class="control-group span4">
+										<label class="control-label" for="cantRep">{{'datamining.smells.testes.mobile.quantidade' | translate }}:*</label>
+										<div class="controls"><input type="text" ng-model="smellCtrl.cantRep" id="cantRep" class="span3"/></div>
+									</div>
+									<div class="control-group span4">
+										<label class="control-label" for="tamMin">{{'datamining.smells.testes.mobile.tam.min' | translate }}:*</label> 										
+										<div class="controls"><input type="text" ng-model="smellCtrl.tamMin" id="tamMin" class="span3" /></div>
+									</div>
+									<div class="control-group span4">
+										<label class="control-label" for="tamMax">{{'datamining.smells.testes.mobile.tam.max' | translate }}:*</label>
+										<div class="controls"><input type="text" ng-model="smellCtrl.tamMax" id="tamMax" class="span3"/></div>
+									</div>
+								</div>
+					            <hr>
+					            <h3>{{ 'datamining.smells.testes.detection.taskdefinition' | translate }}</h3>
+					            <br>
+					            <table class="table table-striped table-bordered table-condensed datamining-table white-table">
+					                <thead>
+					                    <tr>
+					                        <th width="85%">{{'datamining.testes.title' | translate }}</th>
+					                        <th width="15%">{{'datamining.smells.testes.evaluate' | translate }}</th>
+					                    </tr>
+					                </thead>
+					                <tbody>
+				                        <tr ng-repeat="task in smellCtrl.test.tasks | orderBy:'id'">
+				                            <td>{{task.title}}</td>
+				                            <td class="text-center"><input type="checkbox" checked="checked" name="selectedTasks[]" value="{{task.id}}" ng-click="smellCtrl.toggleTaskSelection(task.id)"></td>
+				                        </tr>
+					                </tbody>
+					            </table>
+					            <hr>
+					            <h3>{{ 'datamining.smells.testes.timewindow' | translate }}</h3>
+					            <br>
+					            <div class="row-fluid">
+									<div class="control-group span6">
+						            	<label class="control-label" for="pickerMinSelector">{{ 'date.initial' | translate }}:*</label>
+						            	<div class="controls">
+						                	<input class="span12" type="datetime" placeholder="{{ 'date.initial' | translate}}" date-time ng-model="smellCtrl.minDate" id="pickerMinSelector" date-change="smellCtrl.changeMinMax" max-date="smellCtrl.maxDate" view="date" format="DD/MM/YYYY HH:mm" /> 
+						            	</div>
+						        	</div>
+						        	<div class="control-group span6">
+						            	<label class="control-label" for="pickerMaxSelector">{{ 'date.end' | translate}}:*</label>
+						            	<div class="controls">
+						                	<input class="span12" type="datetime" placeholder="{{ 'date.end' | translate}}" date-time ng-model="smellCtrl.maxDate" id="pickerMaxSelector" date-change="smellCtrl.changeMinMax" min-date="smellCtrl.minDate" view="date" format="DD/MM/YYYY HH:mm" /> 
+						            	</div>
+						        	</div>
+								</div>
+					        	<div class="form-actions">
+					            	<button ng-click="smellCtrl.view()" class="btn btn-primary pull-right submit">{{ 'datamining.smells.testes.detection.startevaluation' | translate }}</button>
+					        	</div>
+							</fieldset>
+						</form>
+		        	</div>
+	        	</div>	        	
+	        </div>
+	        
+	        <div class="span12">
+		        <div class="usdm-box" ng-show="smellCtrl.detectionResult.tasksMobileAnalysisResult != null" >
+	            <div class="usdm-box" ng-repeat="(smell, result) in smellCtrl.detectionResult.tasksMobileAnalysisResult">
+	            	<h3 class="usdm-title-collapse">
+	            		{{smellCtrl.smellName(smell)}}
+	            	</h3>
+	            	<hr>
+	            	<h4>Descripcion</h4>
+		            {{ smellCtrl.smellContent(smell) }}
+		            <br>
+		            <hr>	            	
+		            <h3>{{ 'datamining.smells.testes.detection.detections' | translate }}</h3>
+	            	<table class="table table-striped table-bordered table-condensed datamining-table white-table" ng-repeat="task in result">
+						<thead>
+		                    <tr>
+		                        <!-- <th width="100%">{{task.name}} - {{task.patron}}</th> -->
+		                        <th width="100%">{{ 'pattern' | translate }}: {{task.patron}}<br>
+		                        {{ 'datamining.testes.url' | translate }}: {{task.name}}</th>
+		                    </tr>
+		                </thead>
+		                <tbody>
+	                        <tr ng-repeat="session in task.sessions">
+	                            <td>
+	                            	<a ng-click="smellCtrl.showGraphSmell(smell, task.name, session, $index)" data-toggle="collapse" href="#panel-{{smellCtrl.formattedId3(smell, task.name, session.description)}}">{{session.description}}</a>
+	                            	<ul>
+	                            		<li ng-repeat="(info, value) in session.info"><b>{{ info | translate }}:</b> {{value}}</li>
+	                            	</ul>
+	                            	<div id="panel-{{smellCtrl.formattedId3(smell, task.name, session.description)}}" class="collapse">
+	                            		<div id="graph-{{smellCtrl.formattedId3(smell, task.name, session.description)}}" class="useskill-smell-graph"></div>
+	                            		<p ng-show="smellCtrl.nodesDesc[$index] != null">
+	                            			<b>{{ 'datamining.smells.testes.place' | translate }}:</b> {{smellCtrl.nodesDesc[$index].place}}<br>
+	                            			<b>{{ 'datamining.smells.testes.element' | translate }}:</b> {{smellCtrl.nodesDesc[$index].element}}<br>
+	                            			<b>{{ 'datamining.smells.testes.actiontype' | translate }}:</b> {{smellCtrl.nodesDesc[$index].actiontype}}<br>
+	                            			<b>{{ 'datamining.smells.testes.ocuurences' | translate }}:</b> {{smellCtrl.nodesDesc[$index].occurrences}}
+	                            		</p>
+	                            	</div>
+	                            	<a ng-click="smellCtrl.showTimelineSmell(smell, task.name, session, $index, task.listEventos)" data-toggle="collapse" href="#panelVis-{{smellCtrl.formattedId3(smell, task.name, session.description)}}">Timeline</a>
+	                            	<div id="panelVis-{{smellCtrl.formattedId3(smell, task.name, session.description)}}" style="height: auto;" class="useskill-smell-graph">
+	                            			<p ng-show="smellCtrl.nodesDescTime[$index] != null">
+	                            			<b>{{ 'datamining.smells.testes.place' | translate }}:</b> {{smellCtrl.nodesDescTime[$index].place}}<br>
+	                            			<b>{{ 'datamining.smells.testes.element' | translate }}:</b> {{smellCtrl.nodesDescTime[$index].element}}<br>
+	                            			<b>{{ 'datamining.smells.testes.actiontype' | translate }}:</b> {{smellCtrl.nodesDescTime[$index].actiontype}}<br>
+	                            			<b>{{ 'datamining.smells.testes.ocuurences' | translate }}:</b> {{smellCtrl.nodesDescTime[$index].occurrences}}
+	                            		</p>
+	                            	</div>
+	                            </td>                         
+	                        </tr>
+		                </tbody>
+		            </table>
+	        	</div>	 
+	        	<div "form-actions">   
+	        		<button ng-click="smellCtrl.exportExcel2(smellCtrl.detectionResult.tasksMobileAnalysisResult)" class="btn btn-primary pull-right submit">Export Excel</button>
+	        	</div>	
+	        	</div>	
+	        </div>	
+	        <div class="span12">
+	         <div class="usdm-box" ng-show="smellCtrl.detectionResult.resultSmellAnalysisGeneral != null" >
+	         	<!-- <table class="table table-striped table-bordered table-condensed datamining-table white-table" >
+					<thead>
+		              <tr> -->
+		                <h3 class="usdm-title-collapse">
+	            		{{ 'datamining.smells.testes.mobile.descoberta' | translate }}
+	            		<br>
+	            		</h3>
+		             <!--  </tr>
+		            </thead>
+	         		<tbody>
+	                   <tr>
+	                     <td> -->
+	                     	<table class="table table-striped table-bordered table-condensed datamining-table white-table"  ng-show="smellCtrl.detectionResult.resultSmellAnalysisGeneral != null" ng-repeat="result in smellCtrl.detectionResult.resultSmellAnalysisGeneral">
+								<thead>
+				                    <tr>
+				                        <th width="100%">
+				                        	<b>{{ 'pattern' | translate }}:</b> {{smellCtrl.formattedPattern(result.patron, 0) }}<br>
+				                        	<b>{{ 'datamining.testes.url' | translate }}:</b> {{smellCtrl.formattedPattern(result.patron, 1) }}
+				                        </th>
+				                    </tr>
+				                </thead>
+				                <tbody ng-show="result.lcs == null">
+			                        <tr>
+			                            <td>
+			                            	<li><b>{{ 'datamining.smells.testes.mobile.tam' | translate }}:</b> {{smellCtrl.formattedPattern(result.patron, 2)}}<br></li>
+				                            <li><b>{{ 'datamining.smells.testes.repetitioncount' | translate }}:</b> {{smellCtrl.totalAction(result.listActions)}}<br></li>
+				                            <!-- <li><b>{{ 'datamining.smells.testes.repetitioncount' | translate }}:</b> {{result.lcs)}}<br></li> -->
+				                             <a ng-click="smellCtrl.showTimelinePattern(result.patron,result.listActions, result.listEventosAction)" data-toggle="collapse" href="#{{smellCtrl.formattedWithOutSpaces(result.patron)}}">{{ 'datamining.details' | translate }}</a> 
+								             <!--<a data-toggle="collapse" href="#{{smellCtrl.formattedWithOutSpaces(result.patron)}}">{{ result.patron }}</a>-->
+								             <div id={{smellCtrl.formattedWithOutSpaces(result.patron)}} class="collapse">
+								               	<div id="vis" ng-show="result.listActions != null" ng-repeat="(index, listAction) in result.listActions">
+								                	{{ smellCtrl.getUser(listAction) }}<br>
+								                	{{ smellCtrl.getContexto(listAction) }}
+							            		    	<div id={{result.patron+index}} style="height: auto;"></div>
+						            			</div>
+						            		</div>
+			                            </td>                         
+			                        </tr>
+				                </tbody>
+				                <tbody ng-show="result.lcs != null">
+			                        <tr>
+			                            <td>
+			                            	<li><b>{{ 'datamining.smells.testes.mobile.lcs2' | translate }}:</b> {{smellCtrl.formattedPattern(result.patron, 2)}}<br></li>
+				                    
+			                            </td>                         
+			                        </tr>
+				                </tbody>
+				            </table>
+		         <div class="form-actions">
+					  <button ng-click="smellCtrl.exportExcel(smellCtrl.detectionResult.resultSmellAnalysisGeneral)" class="btn btn-primary pull-right submit">Export Excel Patrones de Uso</button>
+				</div>
+		         
+			  </div>	  	        
+	    	</div>	    
+
+    </div>

@@ -20,6 +20,73 @@ public class PageViewActionDataMining {
 	private Integer infoPosY;
 	private Boolean required;
 	
+	/*CAMBIOS MILL*/
+	private String sClass;
+	private String sUrl;
+	private String sClient;
+	private Integer sMobile;
+	private String sMobileConf;
+	private Long sDuration;	
+	private String sXPath;
+		
+	public Integer getsMobile() {
+		return sMobile;
+	}
+
+	public void setsMobile(Integer sMobile) {
+		this.sMobile = sMobile;
+	}
+
+	public String getsMobileConf() {
+		return sMobileConf;
+	}
+
+	public void setsMobileConf(String sMobileConf) {
+		this.sMobileConf = sMobileConf;
+	}
+
+	public Long getsDuration() {
+		return sDuration;
+	}
+
+	public void setsDuration(Long sDuration) {
+		this.sDuration = sDuration;
+	}	
+
+	public String getsUrl() {
+		return sUrl;
+	}
+
+	public void setsUrl(String sUrl) {
+		this.sUrl = sUrl;
+	}
+
+	public String getsClient() {
+		return sClient;
+	}
+
+	public void setsClient(String sClient) {
+		this.sClient = sClient;
+	}
+	
+	public String getsClass() {
+		return sClass;
+	}
+
+	public void setsClass(String sClass) {
+		this.sClass = sClass;
+	}
+	
+	public String getsXPath() {
+		return sXPath;
+	}
+
+	public void setsXPath(String sXPath) {
+		this.sXPath = sXPath;
+	}
+
+	/*FIN MILL*/
+	
 	public PageViewActionDataMining(ActionDataMining action) {
 		super();
 		this.id = action.getId();
@@ -41,6 +108,16 @@ public class PageViewActionDataMining {
 		this.infoName = action.getsName();
 		this.infoPosX = action.getsPosX();
 		this.infoPosY = action.getsPosY();
+		
+		/*CAMBIOS MILL*/
+		this.sMobile = action.getsMobile();
+		this.sMobileConf = action.getsMobileConf();
+		this.sDuration = action.getsDuration();
+		this.sUrl = action.getsUrl();
+		this.sClient = action.getsClient();
+		this.sClass = action.getsClass();
+		this.sXPath = action.getsXPath();
+		/*FIN MILL*/
 	}
 	
 	public static String getContentAdjusted (ActionDataMining action) {
@@ -145,5 +222,6 @@ public class PageViewActionDataMining {
 	public void setRequired(Boolean required) {
 		this.required = required;
 	}
+
 
 }
