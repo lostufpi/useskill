@@ -8,7 +8,7 @@
   "dependencies": {
     "cross-spawn": "^6.0.5",
     "ejs": "1.0.0",
-    "express": "3.4.6",
+    "express": "4.17.1",
     "forever-monitor": "^1.7.1",
     "jade": "*",
     "lodash": "~2.4.1",
