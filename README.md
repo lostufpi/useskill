@@ -1,9 +1,31 @@
 # UseSkill
+UseSkill: uma ferramenta de apoio à avaliação de usabilidade de sistemas Web.
+
+## Índice
+- [UseSkill](#useskill)
+  - [Índice](#índice)
+  - [Configuração do ambiente para desenvolvimento](#configuração-do-ambiente-para-desenvolvimento)
+    - [Aplicação principal: UseSkill Control e UseSkill On The Fly](#aplicação-principal-useskill-control-e-useskill-on-the-fly)
+      - [Requisitos](#requisitos)
+      - [Configurando Java, Maven e Tomcat](#configurando-java-maven-e-tomcat)
+      - [Configurando o banco de dados](#configurando-o-banco-de-dados)
+        - [Instalação e configuração do MySQL](#instalação-e-configuração-do-mysql)
+        - [Criação das tabelas para a aplicação](#criação-das-tabelas-para-a-aplicação)
+      - [Deploy da aplicação](#deploy-da-aplicação)
+      - [Problemas comuns e possíveis soluções](#problemas-comuns-e-possíveis-soluções)
+      - [Alternativa ao Tomcat: Jetty](#alternativa-ao-tomcat-jetty)
+    - [UseSkill Capture](#useskill-capture)
+      - [Requisitos](#requisitos-1)
+      - [Configuração para o ambiente de desenvolvimento](#configuração-para-o-ambiente-de-desenvolvimento)
+      - [Instalação de dependências e execução](#instalação-de-dependências-e-execução)
 
 ## Configuração do ambiente para desenvolvimento
+Algumas alterações e ferramentas são necessárias para preparar a UseSkill para um ambiente de desenvolvimento. Esta seção mostra os requisitos e passos para esta configuração.
 
-### Requisitos
-* [JDK (Java Development Kit) 8](https://www.oracle.com/br/java/technologies/javase/javase-jdk8-downloads.html)
+### Aplicação principal: UseSkill Control e UseSkill On The Fly
+
+#### Requisitos
+* [JDK (Java Development Kit)](https://www.oracle.com/br/java/technologies/javase/javase-jdk8-downloads.html)
 * [Apache Tomcat 7](https://tomcat.apache.org/download-70.cgi)
 * [Apache Maven 3](https://maven.apache.org/download.cgi)
 * [MySQL Server e MySQL Workbench](https://dev.mysql.com/downloads/installer/)
@@ -13,12 +35,12 @@
 Após a conclusão do download, faça a instalação do JDK 8. Em seguida, extraia o conteúdo do Apache Tomcat 7 e o Apache Maven para uma pasta de sua preferência (Ex.: `C:\apache-tomcat-7.0.107` e `C:\apache-maven-3.6.3`).
 Em seguida, devem ser adicionadas variáveis de ambiente no sistema para que possamos executar o Java, o Maven e o Tomcat a partir de qualquer caminho na linha de comando.
 
-| Nome da variável | Valor da variável                                                       |
-|------------------|-------------------------------------------------------------------------|
-| JAVA_HOME        | `caminho_do_java` (Geralmente em `C:\Program Files\Java\jdk1.8.0_211`)  |
-| MAVEN_HOME       | `caminho_do_maven` (Ex.: `C:\apache-maven-3.6.3`)                       |
-| M2_HOME          | `caminho_do_maven` (Ex.: `C:\apache-maven-3.6.3`)                       |
-| CATALINA_HOME    | `caminho_do_tomcat` (Ex.: `C:\apache-tomcat-7.0.107`)                   |
+| Nome da variável | Valor da variável                                                      |
+| ---------------- | ---------------------------------------------------------------------- |
+| JAVA_HOME        | `caminho_do_java` (Geralmente em `C:\Program Files\Java\jdk1.8.0_211`) |
+| MAVEN_HOME       | `caminho_do_maven` (Ex.: `C:\apache-maven-3.6.3`)                      |
+| M2_HOME          | `caminho_do_maven` (Ex.: `C:\apache-maven-3.6.3`)                      |
+| CATALINA_HOME    | `caminho_do_tomcat` (Ex.: `C:\apache-tomcat-7.0.107`)                  |
 
 Depois, adicione esses três caminhos no PATH:
 ```
@@ -97,7 +119,7 @@ Com isso, estão criados os cargos `admin` (para usar o manager) e o cargo `depl
 
 Abra o MySQL Installer e aguarde o carregamento.
 * Na primeira etapa, *Choosing a Setup Type*, escolha **Custom**;
-* Em seguida, em *Select Products*, selecione um MySQL Server (Ex.: `MySQL Server 8.0.23 - X64`) e clique na seta verde para adicionar;
+* Em seguida, em *Select Products*, selecione um MySQL Server 5 (Ex.: `MySQL Server 5.6.51 - X64`) e clique na seta verde para adicionar;
 * Em *Applications*, selecione um MySQL Workbench (Ex.: `MySQL Workbench 8.0.23 - X64`) e adicione;
 * [Opcional para uso na linha de comando] Ainda em *Applications*, selecione um MySQL Shell (Ex.: `MySQL Shell 8.0.23 - X64`) e adicione;
 * Na etapa seguinte, *Check Requeriments*, se houver alguma pendência, clique em um item da lista e em *Execute*. Repita para todas as que houverem;
@@ -114,7 +136,7 @@ Abra o MySQL Installer e aguarde o carregamento.
 Assim, o serviço do MySQL estará configurado e executando para realizar as conexões.
 
 ##### Criação das tabelas para a aplicação
-Abra o MySQL Workbench e crie uma conexão.
+Abra o MySQL Workbench e crie uma conexão. Crie as tabelas de acordo com a configuração em `Usabilidade/src/main/resources/hibernate.properties` e `Usabilidade/src/main/resources/META-INF/persistence.xml`. É recomendado comentar as configurações de produção e descomentar/criar configurações para execução local.
 
 #### Deploy da aplicação
 Com este repositório já clonado, abra um terminal na pasta Usabilidade. Inicie o servidor Tomcat com o comando
@@ -137,3 +159,71 @@ Se todos os passos estiverem OK, o deploy será feito com sucesso, exibindo um r
 ```
 mvn tomcat7:redeploy
 ```
+Para parar o servidor Tomcat em execução, execute
+```
+catalina stop
+```
+no terminal e aguarde.
+
+#### Problemas comuns e possíveis soluções
+Às vezes, ao fazer um redeploy, a aplicação poderá retornar status 404. Para isso, pare a execução do servidor executando o comando
+```
+catalina stop
+```
+e o reinicie com o comando
+```
+catalina start
+```
+Caso a versão que deseja implantar ainda não tenha ido para o servidor, abra o Tomcat Manager no endereço `localhost:8080/manager/html`, digite o usuário e senha configurados anteriormente (sugerido como `admin` e `admin`) e na aplicação de caminho `/UseSkill` clique em `Undeploy`. Assim a aplicação poderá ser implantada novamente com o comando
+```
+mvn package clean tomcat7:deploy
+```
+
+#### Alternativa ao Tomcat: Jetty
+Com o Maven e o banco de dados MySQL configurados, você pode usar o Jetty como uma alternativa ao deploy via Tomcat. Para isso, use o comando:
+
+```
+mvn jetty:run
+```
+
+O servidor irá iniciar em alguns segundos e ficará disponível na URL `localhost:8080/`.
+
+### UseSkill Capture
+Ferramenta auxiliar para gerenciar ações capturadas construída em Node.js.
+
+#### Requisitos
+* [Node.js](https://nodejs.org/en/)
+
+
+#### Configuração para o ambiente de desenvolvimento
+Em `Usabilidade/useskill-capture/app.js` atribua à variável `subdomain` uma string vazia.
+
+```javascript
+subdomain = '';
+```
+
+No caminho `Usabilidade/useskill-capture/models/index.js`, comente o trecho correspondente ao banco de dados de produção e descomente o de testes.
+
+```javascript
+...
+, sequelize = new Sequelize('usabilidade_testdatamining', 'root', 'root', {
+/*, sequelize = new Sequelize('useskill_datamining', 'root', 'root', {
+  logging: false
+}) */
+...
+```
+Coloque nome do banco, usuário e senha correspondentes ao banco de dados configurado localmente.
+
+#### Instalação de dependências e execução
+Dentro do diretório `Usabilidade/useskill-capture/` digite no terminal o comando
+
+```
+npm install
+```
+
+e aguarde o processo de instalação das dependências. Em seguida, execute o comando
+
+```
+npm start
+```
+e após alguns segundos, a aplicação deverá estar em execução em `localhost:3000`, caso tenha deixado o `subdomain` vazio como sugerido anteriormente.
