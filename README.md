@@ -2,22 +2,20 @@
 UseSkill: uma ferramenta de apoio à avaliação de usabilidade de sistemas Web.
 
 ## Índice
-- [UseSkill](#useskill)
-  - [Índice](#índice)
-  - [Configuração do ambiente para desenvolvimento](#configuração-do-ambiente-para-desenvolvimento)
-    - [Aplicação principal: UseSkill Control e UseSkill On The Fly](#aplicação-principal-useskill-control-e-useskill-on-the-fly)
-      - [Requisitos](#requisitos)
-      - [Configurando Java, Maven e Tomcat](#configurando-java-maven-e-tomcat)
-      - [Configurando o banco de dados](#configurando-o-banco-de-dados)
-        - [Instalação e configuração do MySQL](#instalação-e-configuração-do-mysql)
-        - [Criação das tabelas para a aplicação](#criação-das-tabelas-para-a-aplicação)
-      - [Deploy da aplicação](#deploy-da-aplicação)
-      - [Problemas comuns e possíveis soluções](#problemas-comuns-e-possíveis-soluções)
-      - [Alternativa ao Tomcat: Jetty](#alternativa-ao-tomcat-jetty)
-    - [UseSkill Capture](#useskill-capture)
-      - [Requisitos](#requisitos-1)
-      - [Configuração para o ambiente de desenvolvimento](#configuração-para-o-ambiente-de-desenvolvimento)
-      - [Instalação de dependências e execução](#instalação-de-dependências-e-execução)
+- [Configuração do ambiente para desenvolvimento](#configuração-do-ambiente-para-desenvolvimento)
+  - [Aplicação principal: UseSkill Control e UseSkill On The Fly](#aplicação-principal-useskill-control-e-useskill-on-the-fly)
+    - [Requisitos](#requisitos)
+    - [Configurando Java, Maven e Tomcat](#configurando-java-maven-e-tomcat)
+    - [Configurando o banco de dados](#configurando-o-banco-de-dados)
+      - [Instalação e configuração do MySQL](#instalação-e-configuração-do-mysql)
+      - [Criação das tabelas para a aplicação](#criação-das-tabelas-para-a-aplicação)
+    - [Deploy da aplicação](#deploy-da-aplicação)
+    - [Problemas comuns e possíveis soluções](#problemas-comuns-e-possíveis-soluções)
+    - [Alternativa ao Tomcat: Jetty](#alternativa-ao-tomcat-jetty)
+  - [UseSkill Capture](#useskill-capture)
+    - [Requisitos](#requisitos-1)
+    - [Configuração para o ambiente de desenvolvimento](#configuração-para-o-ambiente-de-desenvolvimento)
+    - [Instalação de dependências e execução](#instalação-de-dependências-e-execução)
 
 ## Configuração do ambiente para desenvolvimento
 Algumas alterações e ferramentas são necessárias para preparar a UseSkill para um ambiente de desenvolvimento. Esta seção mostra os requisitos e passos para esta configuração.
